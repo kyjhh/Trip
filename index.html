@@ -284,6 +284,55 @@
             box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
             margin: 5px;
         }
+        
+        /* 可編輯文字樣式 */
+        .editable-text {
+            position: relative;
+            cursor: text;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .editable-text:hover {
+            background-color: rgba(188, 0, 45, 0.05);
+        }
+        
+        .editable-text:focus {
+            outline: 2px solid var(--japan-red);
+            background-color: white;
+        }
+        
+        .edit-icon {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: var(--japan-red);
+            font-size: 14px;
+        }
+        
+        .editable-text:hover .edit-icon {
+            opacity: 1;
+        }
+        
+        .edit-input {
+            width: 100%;
+            border: 2px solid var(--japan-red);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            background-color: white;
+        }
+        
+        .edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(188, 0, 45, 0.1);
+        }
     </style>
 </head>
 <body class="japan-bg">
@@ -296,28 +345,129 @@
                         <i class="fas fa-torii-gate text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">東京旅行助手</h1>
-                        <p class="text-sm opacity-90">Tokyo Trip Assistant</p>
+                        <!-- 可編輯的應用標題 -->
+                        <div @click="startEditing('appTitle')" class="editable-text">
+                            <h1 v-if="!editing.appTitle" class="text-xl font-bold">
+                                {{ appTitle }}
+                                <i class="fas fa-edit edit-icon"></i>
+                            </h1>
+                            <input 
+                                v-else 
+                                type="text" 
+                                v-model="appTitle" 
+                                @blur="finishEditing('appTitle')" 
+                                @keyup.enter="finishEditing('appTitle')"
+                                class="edit-input text-xl font-bold bg-white/20 border-white"
+                                autofocus
+                            >
+                        </div>
+                        <!-- 可編輯的副標題 -->
+                        <div @click="startEditing('appSubtitle')" class="editable-text mt-1">
+                            <p v-if="!editing.appSubtitle" class="text-sm opacity-90">
+                                {{ appSubtitle }}
+                                <i class="fas fa-edit edit-icon"></i>
+                            </p>
+                            <input 
+                                v-else 
+                                type="text" 
+                                v-model="appSubtitle" 
+                                @blur="finishEditing('appSubtitle')" 
+                                @keyup.enter="finishEditing('appSubtitle')"
+                                class="edit-input text-sm opacity-90 bg-white/20 border-white"
+                                autofocus
+                            >
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm">東京, 日本</div>
-                    <div class="text-xs opacity-80">5°C ~ 12°C</div>
+                    <!-- 可編輯的地點 -->
+                    <div @click="startEditing('location')" class="editable-text inline-block">
+                        <div v-if="!editing.location" class="text-sm">
+                            {{ location }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </div>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="location" 
+                            @blur="finishEditing('location')" 
+                            @keyup.enter="finishEditing('location')"
+                            class="edit-input text-sm bg-white/20 border-white"
+                            autofocus
+                        >
+                    </div>
+                    <!-- 可編輯的溫度 -->
+                    <div @click="startEditing('temperature')" class="editable-text inline-block">
+                        <div v-if="!editing.temperature" class="text-xs opacity-80">
+                            {{ temperature }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </div>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="temperature" 
+                            @blur="finishEditing('temperature')" 
+                            @keyup.enter="finishEditing('temperature')"
+                            class="edit-input text-xs opacity-80 bg-white/20 border-white"
+                            autofocus
+                        >
+                    </div>
                 </div>
             </div>
             
             <!-- 快速摘要 -->
             <div class="grid grid-cols-3 gap-3 mt-4">
-                <div class="bg-white/20 rounded-xl p-3 text-center">
-                    <div class="text-lg font-bold">8</div>
+                <!-- 可編輯的行程天數 -->
+                <div @click="startEditing('daysCount')" class="editable-text bg-white/20 rounded-xl p-3 text-center">
+                    <div v-if="!editing.daysCount" class="text-lg font-bold">
+                        {{ daysCount }}
+                        <i class="fas fa-edit edit-icon"></i>
+                    </div>
+                    <input 
+                        v-else 
+                        type="number" 
+                        v-model.number="daysCount" 
+                        @blur="finishEditing('daysCount')" 
+                        @keyup.enter="finishEditing('daysCount')"
+                        class="edit-input text-lg font-bold text-center bg-transparent"
+                        autofocus
+                    >
                     <div class="text-xs">行程天數</div>
                 </div>
-                <div class="bg-white/20 rounded-xl p-3 text-center">
-                    <div class="text-lg font-bold">¥42,500</div>
+                
+                <!-- 可編輯的總預算 -->
+                <div @click="startEditing('totalBudget')" class="editable-text bg-white/20 rounded-xl p-3 text-center">
+                    <div v-if="!editing.totalBudget" class="text-lg font-bold">
+                        ¥{{ totalBudget }}
+                        <i class="fas fa-edit edit-icon"></i>
+                    </div>
+                    <input 
+                        v-else 
+                        type="number" 
+                        v-model.number="totalBudget" 
+                        @blur="finishEditing('totalBudget')" 
+                        @keyup.enter="finishEditing('totalBudget')"
+                        class="edit-input text-lg font-bold text-center bg-transparent"
+                        autofocus
+                    >
                     <div class="text-xs">總預算</div>
                 </div>
-                <div class="bg-white/20 rounded-xl p-3 text-center">
-                    <div class="text-lg font-bold">15</div>
+                
+                <!-- 可編輯的購物項目數 -->
+                <div @click="startEditing('shoppingItemsCount')" class="editable-text bg-white/20 rounded-xl p-3 text-center">
+                    <div v-if="!editing.shoppingItemsCount" class="text-lg font-bold">
+                        {{ shoppingItemsCount }}
+                        <i class="fas fa-edit edit-icon"></i>
+                    </div>
+                    <input 
+                        v-else 
+                        type="number" 
+                        v-model.number="shoppingItemsCount" 
+                        @blur="finishEditing('shoppingItemsCount')" 
+                        @keyup.enter="finishEditing('shoppingItemsCount')"
+                        class="edit-input text-lg font-bold text-center bg-transparent"
+                        autofocus
+                    >
                     <div class="text-xs">購物項目</div>
                 </div>
             </div>
@@ -333,7 +483,20 @@
                     @click="activeTab = tab.id"
                     :class="['px-4 py-2 text-lg font-medium transition-all whitespace-nowrap', activeTab === tab.id ? 'tab-active font-bold' : 'text-gray-600']"
                 >
-                    <i :class="tab.icon" class="mr-2"></i>{{ tab.name }}
+                    <i :class="tab.icon" class="mr-2"></i>
+                    <!-- 可編輯的選項卡名稱 -->
+                    <span @click.stop="startEditingTab(tab.id)" class="editable-text inline-block">
+                        <span v-if="!editing[tab.id]">{{ tab.name }}</span>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="tab.name" 
+                            @blur="finishEditing(tab.id)" 
+                            @keyup.enter="finishEditing(tab.id)"
+                            class="edit-input text-lg font-medium"
+                            autofocus
+                        >
+                    </span>
                 </button>
             </div>
 
@@ -341,10 +504,23 @@
             <div v-if="activeTab === 'schedule'" class="space-y-6 fade-in">
                 <!-- 行前清單卡片 -->
                 <div class="card-japan p-5 mb-6">
-                    <h2 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-clipboard-check mr-2 torii"></i>
-                        <span class="title-decorator">行前清單</span>
-                    </h2>
+                    <!-- 可編輯的卡片標題 -->
+                    <div @click="startEditing('preTripTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.preTripTitle" class="text-xl font-bold flex items-center">
+                            <i class="fas fa-clipboard-check mr-2 torii"></i>
+                            <span class="title-decorator">{{ preTripTitle }}</span>
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="preTripTitle" 
+                            @blur="finishEditing('preTripTitle')" 
+                            @keyup.enter="finishEditing('preTripTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <div class="space-y-3 mb-4">
                         <div v-for="(item, index) in preTripChecklist" :key="index" class="flex items-center">
@@ -354,13 +530,45 @@
                                 v-model="item.completed"
                                 class="checkbox-japan mr-3"
                             >
-                            <label 
-                                :for="'check-' + index" 
-                                :class="['flex-grow', item.completed ? 'line-through text-gray-500' : '']"
-                            >
-                                {{ item.name }}
-                            </label>
-                            <span v-if="item.priority === 'high'" class="sticker text-xs">重要</span>
+                            <!-- 可編輯的清單項目 -->
+                            <div @click="startEditingChecklistItem(index)" class="editable-text flex-grow">
+                                <label 
+                                    :for="'check-' + index" 
+                                    v-if="!editing[`checklist-${index}`]"
+                                    :class="[item.completed ? 'line-through text-gray-500' : '']"
+                                >
+                                    {{ item.name }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </label>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="item.name" 
+                                    @blur="finishEditing(`checklist-${index}`)" 
+                                    @keyup.enter="finishEditing(`checklist-${index}`)"
+                                    class="edit-input"
+                                    autofocus
+                                >
+                            </div>
+                            <!-- 可編輯的優先級標籤 -->
+                            <div @click="startEditingPriority(index)" class="editable-text">
+                                <span v-if="!editing[`priority-${index}`] && item.priority === 'high'" class="sticker text-xs">
+                                    {{ priorityLabels[item.priority] }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </span>
+                                <select 
+                                    v-else-if="editing[`priority-${index}`]"
+                                    v-model="item.priority"
+                                    @blur="finishEditing(`priority-${index}`)"
+                                    @change="finishEditing(`priority-${index}`)"
+                                    class="edit-input text-xs"
+                                    autofocus
+                                >
+                                    <option value="high">重要</option>
+                                    <option value="medium">中等</option>
+                                    <option value="low">一般</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
@@ -380,10 +588,23 @@
                 
                 <!-- 行程安排卡片 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-calendar-alt mr-2 torii"></i>
-                        <span class="title-decorator">行程安排</span>
-                    </h2>
+                    <!-- 可編輯的卡片標題 -->
+                    <div @click="startEditing('scheduleTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.scheduleTitle" class="text-xl font-bold flex items-center">
+                            <i class="fas fa-calendar-alt mr-2 torii"></i>
+                            <span class="title-decorator">{{ scheduleTitle }}</span>
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="scheduleTitle" 
+                            @blur="finishEditing('scheduleTitle')" 
+                            @keyup.enter="finishEditing('scheduleTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <!-- 行程天數選擇 -->
                     <div class="flex overflow-x-auto space-x-2 mb-4 pb-2">
@@ -393,7 +614,19 @@
                             @click="selectedDay = day.id"
                             :class="['px-4 py-2 rounded-full whitespace-nowrap', selectedDay === day.id ? 'bg-red-100 text-red-600 font-bold' : 'bg-gray-100 text-gray-700']"
                         >
-                            Day {{ day.id }}
+                            <!-- 可編輯的天數顯示 -->
+                            <span @click.stop="startEditingDay(day.id)" class="editable-text">
+                                <span v-if="!editing[`day-${day.id}`]">Day {{ day.id }}</span>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="day.label" 
+                                    @blur="finishEditing(`day-${day.id}`)" 
+                                    @keyup.enter="finishEditing(`day-${day.id}`)"
+                                    class="edit-input"
+                                    autofocus
+                                >
+                            </span>
                         </button>
                     </div>
                     
@@ -402,8 +635,49 @@
                         <div class="weather-indicator rounded-xl p-4 mb-4">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <div class="text-lg font-bold">東京天氣</div>
-                                    <div class="text-sm">{{ selectedDaySchedule.weather.temp }}°C, {{ selectedDaySchedule.weather.condition }}</div>
+                                    <!-- 可編輯的天氣標題 -->
+                                    <div @click="startEditing('weatherTitle')" class="editable-text">
+                                        <div v-if="!editing.weatherTitle" class="text-lg font-bold">
+                                            {{ weatherTitle }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="weatherTitle" 
+                                            @blur="finishEditing('weatherTitle')" 
+                                            @keyup.enter="finishEditing('weatherTitle')"
+                                            class="edit-input text-lg font-bold"
+                                            autofocus
+                                        >
+                                    </div>
+                                    <!-- 可編輯的天氣資訊 -->
+                                    <div @click="startEditingDayWeather(selectedDay)" class="editable-text">
+                                        <div v-if="!editing[`weather-${selectedDay}`]" class="text-sm">
+                                            {{ selectedDaySchedule.weather.temp }}°C, {{ selectedDaySchedule.weather.condition }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <div v-else class="flex items-center space-x-2">
+                                            <input 
+                                                type="text" 
+                                                v-model="selectedDaySchedule.weather.temp" 
+                                                @blur="finishEditing(`weather-${selectedDay}`)" 
+                                                @keyup.enter="finishEditing(`weather-${selectedDay}`)"
+                                                class="edit-input w-16"
+                                                placeholder="溫度"
+                                                autofocus
+                                            >
+                                            <span>,</span>
+                                            <input 
+                                                type="text" 
+                                                v-model="selectedDaySchedule.weather.condition" 
+                                                @blur="finishEditing(`weather-${selectedDay}`)" 
+                                                @keyup.enter="finishEditing(`weather-${selectedDay}`)"
+                                                class="edit-input"
+                                                placeholder="天氣狀況"
+                                            >
+                                        </div>
+                                    </div>
                                 </div>
                                 <i class="fas fa-sun text-3xl"></i>
                             </div>
@@ -411,17 +685,76 @@
                         
                         <div v-for="(item, index) in selectedDaySchedule.items" :key="index" class="trip-item p-4 rounded-xl">
                             <div class="flex justify-between">
-                                <div>
-                                    <div class="font-bold text-lg">{{ item.time }}</div>
-                                    <div class="text-gray-700">{{ item.title }}</div>
-                                    <div class="text-sm text-gray-600 mt-1">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                                <div class="w-full">
+                                    <!-- 可編輯的時間 -->
+                                    <div @click="startEditingScheduleItem(selectedDay, index, 'time')" class="editable-text mb-1">
+                                        <div v-if="!editing[`schedule-${selectedDay}-${index}-time`]" class="font-bold text-lg">
+                                            {{ item.time }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="item.time" 
+                                            @blur="finishEditing(`schedule-${selectedDay}-${index}-time`)" 
+                                            @keyup.enter="finishEditing(`schedule-${selectedDay}-${index}-time`)"
+                                            class="edit-input font-bold text-lg"
+                                            autofocus
+                                        >
                                     </div>
-                                    <div v-if="item.note" class="text-sm text-gray-600 mt-1">
-                                        <i class="fas fa-sticky-note mr-1"></i>{{ item.note }}
+                                    
+                                    <!-- 可編輯的標題 -->
+                                    <div @click="startEditingScheduleItem(selectedDay, index, 'title')" class="editable-text mb-2">
+                                        <div v-if="!editing[`schedule-${selectedDay}-${index}-title`]" class="text-gray-700">
+                                            {{ item.title }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="item.title" 
+                                            @blur="finishEditing(`schedule-${selectedDay}-${index}-title`)" 
+                                            @keyup.enter="finishEditing(`schedule-${selectedDay}-${index}-title`)"
+                                            class="edit-input text-gray-700"
+                                            autofocus
+                                        >
+                                    </div>
+                                    
+                                    <!-- 可編輯的地點 -->
+                                    <div @click="startEditingScheduleItem(selectedDay, index, 'location')" class="editable-text mb-1">
+                                        <div v-if="!editing[`schedule-${selectedDay}-${index}-location`]" class="text-sm text-gray-600">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="item.location" 
+                                            @blur="finishEditing(`schedule-${selectedDay}-${index}-location`)" 
+                                            @keyup.enter="finishEditing(`schedule-${selectedDay}-${index}-location`)"
+                                            class="edit-input text-sm text-gray-600"
+                                            autofocus
+                                        >
+                                    </div>
+                                    
+                                    <!-- 可編輯的備註 -->
+                                    <div v-if="item.note" @click="startEditingScheduleItem(selectedDay, index, 'note')" class="editable-text">
+                                        <div v-if="!editing[`schedule-${selectedDay}-${index}-note`]" class="text-sm text-gray-600">
+                                            <i class="fas fa-sticky-note mr-1"></i>{{ item.note }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="item.note" 
+                                            @blur="finishEditing(`schedule-${selectedDay}-${index}-note`)" 
+                                            @keyup.enter="finishEditing(`schedule-${selectedDay}-${index}-note`)"
+                                            class="edit-input text-sm text-gray-600"
+                                            autofocus
+                                        >
                                     </div>
                                 </div>
-                                <div class="flex items-start">
+                                <div class="flex items-start ml-2">
                                     <button @click="showNavigation(item.location)" class="circle-btn bg-blue-100 text-blue-600 mr-2">
                                         <i class="fas fa-directions"></i>
                                     </button>
@@ -455,10 +788,23 @@
             <div v-if="activeTab === 'map'" class="space-y-6 fade-in">
                 <!-- 地圖搜尋卡片 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-map-marked-alt mr-2 torii"></i>
-                        <span class="title-decorator">東京地圖</span>
-                    </h2>
+                    <!-- 可編輯的卡片標題 -->
+                    <div @click="startEditing('mapTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.mapTitle" class="text-xl font-bold flex items-center">
+                            <i class="fas fa-map-marked-alt mr-2 torii"></i>
+                            <span class="title-decorator">{{ mapTitle }}</span>
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="mapTitle" 
+                            @blur="finishEditing('mapTitle')" 
+                            @keyup.enter="finishEditing('mapTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <div class="mb-4">
                         <div class="flex items-center mb-3">
@@ -493,7 +839,22 @@
                 
                 <!-- 地圖預覽 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4">熱門景點</h2>
+                    <!-- 可編輯的熱門景點標題 -->
+                    <div @click="startEditing('popularSpotsTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.popularSpotsTitle" class="text-xl font-bold">
+                            {{ popularSpotsTitle }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="popularSpotsTitle" 
+                            @blur="finishEditing('popularSpotsTitle')" 
+                            @keyup.enter="finishEditing('popularSpotsTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div 
                             v-for="spot in popularSpots" 
@@ -502,27 +863,143 @@
                             @click="setNavigation(spot.name)"
                         >
                             <div class="text-3xl mb-2">{{ spot.icon }}</div>
-                            <div class="font-bold">{{ spot.name }}</div>
-                            <div class="text-xs text-gray-600 mt-1">{{ spot.area }}</div>
+                            <!-- 可編輯的景點名稱 -->
+                            <div @click.stop="startEditingSpot(spot.id, 'name')" class="editable-text mb-1">
+                                <div v-if="!editing[`spot-${spot.id}-name`]" class="font-bold">
+                                    {{ spot.name }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </div>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="spot.name" 
+                                    @blur="finishEditing(`spot-${spot.id}-name`)" 
+                                    @keyup.enter="finishEditing(`spot-${spot.id}-name`)"
+                                    class="edit-input font-bold text-center"
+                                    autofocus
+                                >
+                            </div>
+                            <!-- 可編輯的區域 -->
+                            <div @click.stop="startEditingSpot(spot.id, 'area')" class="editable-text">
+                                <div v-if="!editing[`spot-${spot.id}-area`]" class="text-xs text-gray-600 mt-1">
+                                    {{ spot.area }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </div>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="spot.area" 
+                                    @blur="finishEditing(`spot-${spot.id}-area`)" 
+                                    @keyup.enter="finishEditing(`spot-${spot.id}-area`)"
+                                    class="edit-input text-xs text-gray-600 text-center"
+                                    autofocus
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- 交通資訊 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4">交通資訊</h2>
+                    <!-- 可編輯的交通資訊標題 -->
+                    <div @click="startEditing('transportTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.transportTitle" class="text-xl font-bold">
+                            {{ transportTitle }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="transportTitle" 
+                            @blur="finishEditing('transportTitle')" 
+                            @keyup.enter="finishEditing('transportTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     <div class="space-y-3">
                         <div v-for="(route, index) in transportRoutes" :key="index" class="flex items-center p-3 bg-gray-50 rounded-lg">
                             <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" :style="{ backgroundColor: route.color }">
                                 <i class="fas fa-train text-white"></i>
                             </div>
                             <div class="flex-grow">
-                                <div class="font-bold">{{ route.name }}</div>
-                                <div class="text-sm text-gray-600">{{ route.from }} → {{ route.to }}</div>
+                                <!-- 可編輯的路線名稱 -->
+                                <div @click.stop="startEditingTransport(index, 'name')" class="editable-text">
+                                    <div v-if="!editing[`transport-${index}-name`]" class="font-bold">
+                                        {{ route.name }}
+                                        <i class="fas fa-edit edit-icon"></i>
+                                    </div>
+                                    <input 
+                                        v-else 
+                                        type="text" 
+                                        v-model="route.name" 
+                                        @blur="finishEditing(`transport-${index}-name`)" 
+                                        @keyup.enter="finishEditing(`transport-${index}-name`)"
+                                        class="edit-input font-bold"
+                                        autofocus
+                                    >
+                                </div>
+                                <!-- 可編輯的起點終點 -->
+                                <div @click.stop="startEditingTransport(index, 'route')" class="editable-text">
+                                    <div v-if="!editing[`transport-${index}-route`]" class="text-sm text-gray-600">
+                                        {{ route.from }} → {{ route.to }}
+                                        <i class="fas fa-edit edit-icon"></i>
+                                    </div>
+                                    <div v-else class="flex items-center">
+                                        <input 
+                                            type="text" 
+                                            v-model="route.from" 
+                                            @blur="finishEditing(`transport-${index}-route`)" 
+                                            @keyup.enter="finishEditing(`transport-${index}-route`)"
+                                            class="edit-input text-sm text-gray-600 w-20"
+                                            placeholder="起點"
+                                            autofocus
+                                        >
+                                        <span class="mx-1">→</span>
+                                        <input 
+                                            type="text" 
+                                            v-model="route.to" 
+                                            @blur="finishEditing(`transport-${index}-route`)" 
+                                            @keyup.enter="finishEditing(`transport-${index}-route`)"
+                                            class="edit-input text-sm text-gray-600 w-20"
+                                            placeholder="終點"
+                                        >
+                                    </div>
+                                </div>
                             </div>
                             <div class="text-right">
-                                <div class="font-bold">{{ route.time }}</div>
-                                <div class="text-sm text-gray-600">{{ route.cost }}</div>
+                                <!-- 可編輯的時間 -->
+                                <div @click.stop="startEditingTransport(index, 'time')" class="editable-text">
+                                    <div v-if="!editing[`transport-${index}-time`]" class="font-bold">
+                                        {{ route.time }}
+                                        <i class="fas fa-edit edit-icon"></i>
+                                    </div>
+                                    <input 
+                                        v-else 
+                                        type="text" 
+                                        v-model="route.time" 
+                                        @blur="finishEditing(`transport-${index}-time`)" 
+                                        @keyup.enter="finishEditing(`transport-${index}-time`)"
+                                        class="edit-input font-bold text-right"
+                                        autofocus
+                                    >
+                                </div>
+                                <!-- 可編輯的費用 -->
+                                <div @click.stop="startEditingTransport(index, 'cost')" class="editable-text">
+                                    <div v-if="!editing[`transport-${index}-cost`]" class="text-sm text-gray-600">
+                                        {{ route.cost }}
+                                        <i class="fas fa-edit edit-icon"></i>
+                                    </div>
+                                    <input 
+                                        v-else 
+                                        type="text" 
+                                        v-model="route.cost" 
+                                        @blur="finishEditing(`transport-${index}-cost`)" 
+                                        @keyup.enter="finishEditing(`transport-${index}-cost`)"
+                                        class="edit-input text-sm text-gray-600 text-right"
+                                        autofocus
+                                    >
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -533,10 +1010,23 @@
             <div v-if="activeTab === 'accounting'" class="space-y-6 fade-in">
                 <!-- 新增支出卡片 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-yen-sign mr-2 torii"></i>
-                        <span class="title-decorator">記一筆</span>
-                    </h2>
+                    <!-- 可編輯的記帳標題 -->
+                    <div @click="startEditing('accountingTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.accountingTitle" class="text-xl font-bold flex items-center">
+                            <i class="fas fa-yen-sign mr-2 torii"></i>
+                            <span class="title-decorator">{{ accountingTitle }}</span>
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="accountingTitle" 
+                            @blur="finishEditing('accountingTitle')" 
+                            @keyup.enter="finishEditing('accountingTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <div class="space-y-4">
                         <div>
@@ -559,7 +1049,22 @@
                                     :class="['payment-option flex flex-col items-center justify-center p-3 rounded-xl', newExpense.paymentMethod === method.id ? 'border-2 border-red-500 bg-red-50' : 'border border-gray-200']"
                                 >
                                     <i :class="method.icon" class="text-2xl mb-2" :style="{color: method.color}"></i>
-                                    <span class="text-sm font-medium">{{ method.name }}</span>
+                                    <!-- 可編輯的付款方式名稱 -->
+                                    <div @click.stop="startEditingPaymentMethod(method.id)" class="editable-text">
+                                        <span v-if="!editing[`payment-${method.id}`]" class="text-sm font-medium">
+                                            {{ method.name }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </span>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="method.name" 
+                                            @blur="finishEditing(`payment-${method.id}`)" 
+                                            @keyup.enter="finishEditing(`payment-${method.id}`)"
+                                            class="edit-input text-sm font-medium text-center"
+                                            autofocus
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -591,7 +1096,22 @@
                 
                 <!-- 支出統計 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4">支出統計</h2>
+                    <!-- 可編輯的支出統計標題 -->
+                    <div @click="startEditing('expenseStatsTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.expenseStatsTitle" class="text-xl font-bold">
+                            {{ expenseStatsTitle }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="expenseStatsTitle" 
+                            @blur="finishEditing('expenseStatsTitle')" 
+                            @keyup.enter="finishEditing('expenseStatsTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <div class="grid grid-cols-3 gap-3 mb-4">
                         <div class="text-center p-3 rounded-xl bg-red-50">
@@ -616,7 +1136,22 @@
                 <!-- 支出紀錄 -->
                 <div class="card-japan p-5">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold">支出明細</h2>
+                        <!-- 可編輯的支出明細標題 -->
+                        <div @click="startEditing('expenseDetailsTitle')" class="editable-text">
+                            <h2 v-if="!editing.expenseDetailsTitle" class="text-xl font-bold">
+                                {{ expenseDetailsTitle }}
+                                <i class="fas fa-edit edit-icon"></i>
+                            </h2>
+                            <input 
+                                v-else 
+                                type="text" 
+                                v-model="expenseDetailsTitle" 
+                                @blur="finishEditing('expenseDetailsTitle')" 
+                                @keyup.enter="finishEditing('expenseDetailsTitle')"
+                                class="edit-input text-xl font-bold"
+                                autofocus
+                            >
+                        </div>
                         <div class="flex space-x-2">
                             <button 
                                 v-for="filter in expenseFilters" 
@@ -642,7 +1177,22 @@
                         >
                             <div class="flex justify-between">
                                 <div>
-                                    <h3 class="font-bold">{{ expense.name }}</h3>
+                                    <!-- 可編輯的支出項目名稱 -->
+                                    <div @click="startEditingExpense(index, 'name')" class="editable-text">
+                                        <h3 v-if="!editing[`expense-${index}-name`]" class="font-bold">
+                                            {{ expense.name }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </h3>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="expense.name" 
+                                            @blur="finishEditing(`expense-${index}-name`)" 
+                                            @keyup.enter="finishEditing(`expense-${index}-name`)"
+                                            class="edit-input font-bold"
+                                            autofocus
+                                        >
+                                    </div>
                                     <div class="flex items-center mt-1 text-sm text-gray-600">
                                         <i class="far fa-calendar mr-1"></i>
                                         <span class="mr-3">{{ expense.date }}</span>
@@ -651,7 +1201,23 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-lg font-bold" style="color: var(--japan-green);">¥ {{ expense.amount }}</div>
+                                    <!-- 可編輯的支出金額 -->
+                                    <div @click="startEditingExpense(index, 'amount')" class="editable-text">
+                                        <div v-if="!editing[`expense-${index}-amount`]" class="text-lg font-bold" style="color: var(--japan-green);">
+                                            ¥ {{ expense.amount }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="number" 
+                                            v-model="expense.amount" 
+                                            @blur="finishEditing(`expense-${index}-amount`)" 
+                                            @keyup.enter="finishEditing(`expense-${index}-amount`)"
+                                            class="edit-input text-lg font-bold text-right"
+                                            style="color: var(--japan-green);"
+                                            autofocus
+                                        >
+                                    </div>
                                     <div class="text-sm text-gray-600 capitalize">{{ getCategoryName(expense.category) }}</div>
                                 </div>
                             </div>
@@ -664,10 +1230,23 @@
             <div v-if="activeTab === 'shopping'" class="space-y-6 fade-in">
                 <!-- 新增購物項目 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-shopping-bag mr-2 torii"></i>
-                        <span class="title-decorator">購物清單</span>
-                    </h2>
+                    <!-- 可編輯的購物清單標題 -->
+                    <div @click="startEditing('shoppingTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.shoppingTitle" class="text-xl font-bold flex items-center">
+                            <i class="fas fa-shopping-bag mr-2 torii"></i>
+                            <span class="title-decorator">{{ shoppingTitle }}</span>
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="shoppingTitle" 
+                            @blur="finishEditing('shoppingTitle')" 
+                            @keyup.enter="finishEditing('shoppingTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     
                     <div class="flex space-x-2 mb-3">
                         <input 
@@ -705,7 +1284,22 @@
                 <!-- 購物清單項目 -->
                 <div class="card-japan p-5">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold">我的清單</h2>
+                        <!-- 可編輯的我的清單標題 -->
+                        <div @click="startEditing('myListTitle')" class="editable-text">
+                            <h2 v-if="!editing.myListTitle" class="text-xl font-bold">
+                                {{ myListTitle }}
+                                <i class="fas fa-edit edit-icon"></i>
+                            </h2>
+                            <input 
+                                v-else 
+                                type="text" 
+                                v-model="myListTitle" 
+                                @blur="finishEditing('myListTitle')" 
+                                @keyup.enter="finishEditing('myListTitle')"
+                                class="edit-input text-xl font-bold"
+                                autofocus
+                            >
+                        </div>
                         <div class="text-sm text-gray-600">
                             {{ completedItems }} / {{ shoppingList.length }} 已完成
                         </div>
@@ -732,12 +1326,38 @@
                                 </button>
                                 
                                 <div class="flex-grow">
-                                    <h3 :class="['font-medium', item.completed ? 'line-through text-gray-500' : '']">
-                                        {{ item.name }}
-                                        <span v-if="item.important" class="ml-2 text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">重要</span>
-                                    </h3>
-                                    <div class="text-sm text-gray-600 mt-1 flex items-center">
-                                        <i class="fas fa-yen-sign mr-1"></i> 預算：{{ item.budget ? '¥' + item.budget : '未設定' }}
+                                    <!-- 可編輯的購物項目名稱 -->
+                                    <div @click="startEditingShoppingItem(index, 'name')" class="editable-text">
+                                        <h3 v-if="!editing[`shopping-${index}-name`]" :class="['font-medium', item.completed ? 'line-through text-gray-500' : '']">
+                                            {{ item.name }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </h3>
+                                        <input 
+                                            v-else 
+                                            type="text" 
+                                            v-model="item.name" 
+                                            @blur="finishEditing(`shopping-${index}-name`)" 
+                                            @keyup.enter="finishEditing(`shopping-${index}-name`)"
+                                            :class="['edit-input font-medium', item.completed ? 'line-through text-gray-500' : '']"
+                                            autofocus
+                                        >
+                                    </div>
+                                    <!-- 可編輯的購物項目預算 -->
+                                    <div @click="startEditingShoppingItem(index, 'budget')" class="editable-text">
+                                        <div v-if="!editing[`shopping-${index}-budget`]" class="text-sm text-gray-600 mt-1 flex items-center">
+                                            <i class="fas fa-yen-sign mr-1"></i> 預算：{{ item.budget ? '¥' + item.budget : '未設定' }}
+                                            <i class="fas fa-edit edit-icon"></i>
+                                        </div>
+                                        <input 
+                                            v-else 
+                                            type="number" 
+                                            v-model="item.budget" 
+                                            @blur="finishEditing(`shopping-${index}-budget`)" 
+                                            @keyup.enter="finishEditing(`shopping-${index}-budget`)"
+                                            class="edit-input text-sm text-gray-600"
+                                            placeholder="預算"
+                                            autofocus
+                                        >
                                     </div>
                                 </div>
                                 
@@ -777,12 +1397,73 @@
                 
                 <!-- 日本購物推薦 -->
                 <div class="card-japan p-5">
-                    <h2 class="text-xl font-bold mb-4">日本購物推薦</h2>
+                    <!-- 可編輯的購物推薦標題 -->
+                    <div @click="startEditing('shoppingRecommendationsTitle')" class="editable-text mb-4">
+                        <h2 v-if="!editing.shoppingRecommendationsTitle" class="text-xl font-bold">
+                            {{ shoppingRecommendationsTitle }}
+                            <i class="fas fa-edit edit-icon"></i>
+                        </h2>
+                        <input 
+                            v-else 
+                            type="text" 
+                            v-model="shoppingRecommendationsTitle" 
+                            @blur="finishEditing('shoppingRecommendationsTitle')" 
+                            @keyup.enter="finishEditing('shoppingRecommendationsTitle')"
+                            class="edit-input text-xl font-bold"
+                            autofocus
+                        >
+                    </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div v-for="recommendation in shoppingRecommendations" :key="recommendation.id" class="bg-gray-50 rounded-xl p-4">
-                            <div class="font-bold">{{ recommendation.name }}</div>
-                            <div class="text-sm text-gray-600 mt-1">{{ recommendation.description }}</div>
-                            <div class="text-xs text-red-600 mt-2">約 ¥{{ recommendation.price }}</div>
+                            <!-- 可編輯的推薦項目名稱 -->
+                            <div @click="startEditingRecommendation(recommendation.id, 'name')" class="editable-text">
+                                <div v-if="!editing[`recommendation-${recommendation.id}-name`]" class="font-bold">
+                                    {{ recommendation.name }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </div>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="recommendation.name" 
+                                    @blur="finishEditing(`recommendation-${recommendation.id}-name`)" 
+                                    @keyup.enter="finishEditing(`recommendation-${recommendation.id}-name`)"
+                                    class="edit-input font-bold"
+                                    autofocus
+                                >
+                            </div>
+                            <!-- 可編輯的推薦描述 -->
+                            <div @click="startEditingRecommendation(recommendation.id, 'description')" class="editable-text">
+                                <div v-if="!editing[`recommendation-${recommendation.id}-description`]" class="text-sm text-gray-600 mt-1">
+                                    {{ recommendation.description }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </div>
+                                <input 
+                                    v-else 
+                                    type="text" 
+                                    v-model="recommendation.description" 
+                                    @blur="finishEditing(`recommendation-${recommendation.id}-description`)" 
+                                    @keyup.enter="finishEditing(`recommendation-${recommendation.id}-description`)"
+                                    class="edit-input text-sm text-gray-600"
+                                    autofocus
+                                >
+                            </div>
+                            <!-- 可編輯的推薦價格 -->
+                            <div @click="startEditingRecommendation(recommendation.id, 'price')" class="editable-text">
+                                <div v-if="!editing[`recommendation-${recommendation.id}-price`]" class="text-xs text-red-600 mt-2">
+                                    約 ¥{{ recommendation.price }}
+                                    <i class="fas fa-edit edit-icon"></i>
+                                </div>
+                                <input 
+                                    v-else 
+                                    type="number" 
+                                    v-model="recommendation.price" 
+                                    @blur="finishEditing(`recommendation-${recommendation.id}-price`)" 
+                                    @keyup.enter="finishEditing(`recommendation-${recommendation.id}-price`)"
+                                    class="edit-input text-xs text-red-600"
+                                    placeholder="價格"
+                                    autofocus
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -811,13 +1492,46 @@
                 // 當前選中的選項卡
                 const activeTab = ref('schedule');
                 
+                // 編輯狀態管理
+                const editing = ref({});
+                
+                // 文字內容（全部可編輯）
+                const appTitle = ref('東京旅行助手');
+                const appSubtitle = ref('Tokyo Trip Assistant');
+                const location = ref('東京, 日本');
+                const temperature = ref('5°C ~ 12°C');
+                const daysCount = ref(8);
+                const totalBudget = ref(42500);
+                const shoppingItemsCount = ref(15);
+                
+                // 卡片標題
+                const preTripTitle = ref('行前清單');
+                const scheduleTitle = ref('行程安排');
+                const weatherTitle = ref('東京天氣');
+                const mapTitle = ref('東京地圖');
+                const popularSpotsTitle = ref('熱門景點');
+                const transportTitle = ref('交通資訊');
+                const accountingTitle = ref('記一筆');
+                const expenseStatsTitle = ref('支出統計');
+                const expenseDetailsTitle = ref('支出明細');
+                const shoppingTitle = ref('購物清單');
+                const myListTitle = ref('我的清單');
+                const shoppingRecommendationsTitle = ref('日本購物推薦');
+                
+                // 優先級標籤
+                const priorityLabels = ref({
+                    high: '重要',
+                    medium: '中等',
+                    low: '一般'
+                });
+                
                 // 選項卡數據
-                const tabs = [
+                const tabs = ref([
                     { id: 'schedule', name: '行程', icon: 'fas fa-calendar-alt' },
                     { id: 'map', name: '地圖', icon: 'fas fa-map' },
                     { id: 'accounting', name: '記帳', icon: 'fas fa-yen-sign' },
                     { id: 'shopping', name: '購物', icon: 'fas fa-shopping-bag' }
-                ];
+                ]);
                 
                 // 行前清單相關數據
                 const preTripChecklist = ref([
@@ -834,14 +1548,14 @@
                 
                 // 行程相關數據
                 const tripDays = ref([
-                    { id: 1, date: '11/20' },
-                    { id: 2, date: '11/21' },
-                    { id: 3, date: '11/22' },
-                    { id: 4, date: '11/23' },
-                    { id: 5, date: '11/24' },
-                    { id: 6, date: '11/25' },
-                    { id: 7, date: '11/26' },
-                    { id: 8, date: '11/27' }
+                    { id: 1, label: 'Day 1', date: '11/20' },
+                    { id: 2, label: 'Day 2', date: '11/21' },
+                    { id: 3, label: 'Day 3', date: '11/22' },
+                    { id: 4, label: 'Day 4', date: '11/23' },
+                    { id: 5, label: 'Day 5', date: '11/24' },
+                    { id: 6, label: 'Day 6', date: '11/25' },
+                    { id: 7, label: 'Day 7', date: '11/26' },
+                    { id: 8, label: 'Day 8', date: '11/27' }
                 ]);
                 const selectedDay = ref(1);
                 const scheduleData = ref({
@@ -980,7 +1694,64 @@
                     return totalShoppingBudget.value - spent;
                 });
                 
-                // 方法
+                // 編輯相關方法
+                const startEditing = (field) => {
+                    editing.value[field] = true;
+                };
+                
+                const finishEditing = (field) => {
+                    editing.value[field] = false;
+                };
+                
+                const startEditingTab = (tabId) => {
+                    editing.value[tabId] = true;
+                };
+                
+                const startEditingChecklistItem = (index) => {
+                    editing.value[`checklist-${index}`] = true;
+                };
+                
+                const startEditingPriority = (index) => {
+                    editing.value[`priority-${index}`] = true;
+                };
+                
+                const startEditingDay = (dayId) => {
+                    editing.value[`day-${dayId}`] = true;
+                };
+                
+                const startEditingDayWeather = (dayId) => {
+                    editing.value[`weather-${dayId}`] = true;
+                };
+                
+                const startEditingScheduleItem = (dayId, index, field) => {
+                    editing.value[`schedule-${dayId}-${index}-${field}`] = true;
+                };
+                
+                const startEditingSpot = (spotId, field) => {
+                    editing.value[`spot-${spotId}-${field}`] = true;
+                };
+                
+                const startEditingTransport = (index, field) => {
+                    editing.value[`transport-${index}-${field}`] = true;
+                };
+                
+                const startEditingPaymentMethod = (methodId) => {
+                    editing.value[`payment-${methodId}`] = true;
+                };
+                
+                const startEditingExpense = (index, field) => {
+                    editing.value[`expense-${index}-${field}`] = true;
+                };
+                
+                const startEditingShoppingItem = (index, field) => {
+                    editing.value[`shopping-${index}-${field}`] = true;
+                };
+                
+                const startEditingRecommendation = (recommendationId, field) => {
+                    editing.value[`recommendation-${recommendationId}-${field}`] = true;
+                };
+                
+                // 其他方法
                 const addChecklistItem = () => {
                     if (!newChecklistItem.value.trim()) return;
                     
@@ -1128,6 +1899,27 @@
                 return {
                     activeTab,
                     tabs,
+                    editing,
+                    appTitle,
+                    appSubtitle,
+                    location,
+                    temperature,
+                    daysCount,
+                    totalBudget,
+                    shoppingItemsCount,
+                    preTripTitle,
+                    scheduleTitle,
+                    weatherTitle,
+                    mapTitle,
+                    popularSpotsTitle,
+                    transportTitle,
+                    accountingTitle,
+                    expenseStatsTitle,
+                    expenseDetailsTitle,
+                    shoppingTitle,
+                    myListTitle,
+                    shoppingRecommendationsTitle,
+                    priorityLabels,
                     preTripChecklist,
                     newChecklistItem,
                     tripDays,
@@ -1158,6 +1950,20 @@
                     completedItems,
                     totalShoppingBudget,
                     remainingShoppingBudget,
+                    startEditing,
+                    finishEditing,
+                    startEditingTab,
+                    startEditingChecklistItem,
+                    startEditingPriority,
+                    startEditingDay,
+                    startEditingDayWeather,
+                    startEditingScheduleItem,
+                    startEditingSpot,
+                    startEditingTransport,
+                    startEditingPaymentMethod,
+                    startEditingExpense,
+                    startEditingShoppingItem,
+                    startEditingRecommendation,
                     addChecklistItem,
                     addTripItem,
                     removeTripItem,
