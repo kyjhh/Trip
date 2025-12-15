@@ -586,6 +586,9 @@
     </style>
 </head>
 <body>
+    <!-- Vue 應用根元素 -->
+    <div id="app">
+    
     <!-- 背景裝飾 -->
     <div class="bg-dots"></div>
     
@@ -1269,7 +1272,7 @@
                             <div>
                                 <label class="block text-gray-300 mb-1">抵達時間</label>
                                 <input v-model="flightInfo.return.arrivalTime" class="sekai-input">
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -1531,7 +1534,8 @@
             </div>
         </div>
     </div>
-</div>
+    
+    </div> <!-- 結束 div#app -->
 
 <script>
     const { createApp, ref, computed, onMounted, nextTick, watch } = Vue;
