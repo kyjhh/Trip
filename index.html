@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東京4日3夜旅行助手</title>
+    <title>東京4日3夜旅行手帳</title>
     <!-- 引入 Vue.js -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- 引入 Tailwind CSS -->
@@ -13,100 +13,183 @@
     <!-- 引入 Font Awesome 圖標 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入 Google 字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* 日式和風手帳主題 */
         * {
-            font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+            font-family: 'M PLUS Rounded 1c', 'Noto Sans TC', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background: linear-gradient(135deg, #fef6f0 0%, #f5e9dd 100%);
             max-width: 480px;
             margin: 0 auto;
             min-height: 100vh;
             position: relative;
         }
         
-        /* 裝飾元素 */
+        /* 手帳紙張紋理背景 */
         body::before {
             content: "";
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 200px;
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            border-radius: 0 0 40px 40px;
-            z-index: -1;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-color: #faf4eb;
+            z-index: -2;
         }
         
-        /* 卡片樣式增強 */
+        /* 頂部裝飾 */
+        .header-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(135deg, #c83c3c 0%, #a82d2d 100%);
+            border-radius: 0 0 40px 40px;
+            z-index: -1;
+            box-shadow: 0 4px 20px rgba(168, 45, 45, 0.3);
+        }
+        
+        /* 手帳裝飾圖案 */
+        .header-decoration::before {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 40px;
+            background-color: #faf4eb;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 櫻花裝飾 */
+        .sakura-decoration {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #ffb7c5, #ff8fa3);
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        .sakura-decoration::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 30% 30%, #ffb7c5, #ff8fa3);
+            border-radius: 50%;
+        }
+        
+        /* 卡片樣式 - 手帳風格 */
         .card {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background-color: #fffef9;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
             overflow: hidden;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid #e8d8c3;
+            position: relative;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
         }
         
         .card-header {
-            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
-            color: white;
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            color: #fff8e1;
             padding: 20px;
             position: relative;
             overflow: hidden;
+            border-bottom: 2px solid #d4a574;
         }
         
         .card-header::after {
             content: "";
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100px;
-            height: 100px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-image: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 1px, transparent 2px);
+            background-size: 10px 10px;
+            opacity: 0.5;
         }
         
-        /* 底部導航增強 */
+        /* 底部導航 - 和風手帳風格 */
         .bottom-nav {
-            background-color: white;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            background-color: #fffef9;
+            box-shadow: 0 -5px 20px rgba(139, 69, 19, 0.1);
             border-top-left-radius: 25px;
             border-top-right-radius: 25px;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            border-top: 3px solid #d4a574;
+            background: #fffef9;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .bottom-nav::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 10px;
+            background-color: #8b4513;
+            border-radius: 0 0 5px 5px;
         }
         
         .nav-item {
             padding: 12px 0;
             font-size: 12px;
-            color: #64748b;
+            color: #8b4513;
             position: relative;
             transition: all 0.3s;
         }
         
         .nav-item.active {
-            color: #3b82f6;
+            color: #c83c3c;
             font-weight: 600;
         }
         
         .nav-item.active::before {
             content: "";
             position: absolute;
-            top: 0;
+            top: -3px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 4px;
-            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
-            border-radius: 0 0 4px 4px;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #c83c3c 0%, #a82d2d 100%);
+            border-radius: 3px;
         }
         
         .nav-icon {
@@ -114,144 +197,150 @@
             margin-bottom: 6px;
         }
         
-        /* 航班卡片樣式增強 */
+        /* 航班卡片樣式 */
         .flight-card {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 16px;
+            background: linear-gradient(135deg, #f9f3e9 0%, #f5e9dd 100%);
+            border-radius: 10px;
             padding: 20px;
             position: relative;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            border: 1px solid #e8d8c3;
+            border-left: 4px solid #c83c3c;
         }
         
         .flight-card::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
-            border-radius: 16px 16px 0 0;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px dashed #d4a574;
+            border-radius: 6px;
+            pointer-events: none;
         }
         
         .flight-time {
             font-size: 28px;
             font-weight: 700;
-            color: #1e40af;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            color: #8b4513;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
         }
         
-        /* 優先級標籤增強 */
+        /* 優先級標籤 */
         .priority-tag {
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 6px 14px;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: 0.5px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
         .priority-high {
-            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-            color: #dc2626;
+            background: linear-gradient(135deg, #ffcccc 0%, #ff9999 100%);
+            color: #a82d2d;
         }
         
         .priority-medium {
-            background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
-            color: #d97706;
+            background: linear-gradient(135deg, #ffe6cc 0%, #ffcc99 100%);
+            color: #8b4513;
         }
         
         .priority-low {
-            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
-            color: #059669;
+            background: linear-gradient(135deg, #e6f7e6 0%, #cce8cc 100%);
+            color: #2d5c2d;
         }
         
-        /* 購物清單圖片區域增強 */
+        /* 購物清單圖片區域 */
         .shopping-image {
             width: 100px;
             height: 100px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            border: 2px solid #e8d8c3;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #94a3b8;
+            color: #b3a38a;
             cursor: pointer;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.1);
             transition: all 0.3s;
+            background-color: #fffef9;
         }
         
         .shopping-image:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 15px rgba(139, 69, 19, 0.15);
         }
         
         .shopping-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 6px;
         }
         
-        /* 天氣卡片增強 */
+        /* 天氣卡片 */
         .weather-card {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            color: white;
-            border-radius: 20px;
+            background: linear-gradient(135deg, #3a7ca5 0%, #2c5a7a 100%);
+            color: #fff8e1;
+            border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 20px rgba(44, 90, 122, 0.3);
             position: relative;
             overflow: hidden;
+            border: 1px solid #8b9fb1;
         }
         
         .weather-card::before {
             content: "";
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #8b9fb1, #3a7ca5, #8b9fb1);
         }
         
-        /* 圓餅圖容器增強 */
+        /* 圓餅圖容器 */
         .chart-container {
             position: relative;
             height: 280px;
             width: 100%;
-            background: white;
-            border-radius: 16px;
+            background: #fffef9;
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.05);
+            border: 1px solid #e8d8c3;
         }
         
-        /* 模態框樣式增強 */
+        /* 模態框樣式 */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(139, 69, 19, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             padding: 16px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(3px);
         }
         
         .modal-content {
-            background-color: white;
-            border-radius: 25px;
+            background-color: #fffef9;
+            border-radius: 15px;
             width: 100%;
             max-width: 420px;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.3);
             animation: modalSlideIn 0.3s ease-out;
+            border: 2px solid #d4a574;
         }
         
         @keyframes modalSlideIn {
@@ -265,23 +354,23 @@
             }
         }
         
-        /* 金額顯示增強 */
+        /* 金額顯示 */
         .amount-display {
             font-size: 22px;
             font-weight: 700;
-            color: #1e40af;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            color: #8b4513;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
         }
         
         .hkd-amount {
             font-size: 14px;
-            color: #64748b;
+            color: #a0522d;
             font-weight: 500;
         }
         
-        /* 進度條增強 */
+        /* 進度條 */
         .progress-container {
-            background: #e2e8f0;
+            background: #e8d8c3;
             border-radius: 10px;
             height: 12px;
             overflow: hidden;
@@ -291,7 +380,7 @@
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+            background: linear-gradient(90deg, #c83c3c 0%, #a82d2d 100%);
             border-radius: 10px;
             transition: width 0.8s ease-out;
             position: relative;
@@ -317,11 +406,11 @@
         /* 裝飾性分隔線 */
         .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
             margin: 20px 0;
         }
         
-        /* 日期選擇器增強 */
+        /* 日期選擇器 */
         .day-selector {
             display: flex;
             overflow-x: auto;
@@ -335,85 +424,115 @@
             flex-direction: column;
             align-items: center;
             padding: 12px 18px;
-            border-radius: 15px;
+            border-radius: 10px;
             margin-right: 10px;
             cursor: pointer;
             transition: all 0.3s;
             min-width: 90px;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: #fffef9;
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.1);
             border: 2px solid transparent;
         }
         
         .day-item.active {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            color: white;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            color: #fff8e1;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            border: 2px solid #d4a574;
         }
         
-        /* 購物清單項目增強 */
+        /* 購物清單項目 */
         .shopping-item {
-            background: white;
-            border-radius: 18px;
+            background: #fffef9;
+            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.1);
+            border: 1px solid #e8d8c3;
             transition: all 0.3s;
             margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .shopping-item::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 20px;
+            right: 20px;
+            height: 10px;
+            background-color: #fffef9;
+            border-radius: 50%;
+            opacity: 0.5;
         }
         
         .shopping-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.15);
         }
         
-        /* 按鈕增強 */
+        /* 按鈕 */
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-            color: white;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #c83c3c 0%, #a82d2d 100%);
+            color: #fff8e1;
+            border-radius: 10px;
             padding: 14px 24px;
             font-weight: 600;
             transition: all 0.3s;
             border: none;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 5px 15px rgba(200, 60, 60, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 20px rgba(200, 60, 60, 0.4);
         }
         
-        /* 輸入框增強 */
+        /* 輸入框 */
         .input-enhanced {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            border: 2px solid #e8d8c3;
+            border-radius: 10px;
             padding: 14px 18px;
             font-size: 16px;
             transition: all 0.3s;
             width: 100%;
-            background: white;
+            background: #fffef9;
         }
         
         .input-enhanced:focus {
-            border-color: #3b82f6;
+            border-color: #c83c3c;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(200, 60, 60, 0.1);
         }
         
-        /* 自定義滾動條增強 */
+        /* 自定義滾動條 */
         ::-webkit-scrollbar {
             width: 8px;
         }
         
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #f5e9dd;
             border-radius: 10px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
             border-radius: 10px;
         }
         
@@ -441,7 +560,7 @@
             left: 0;
             width: 50px;
             height: 4px;
-            background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+            background: linear-gradient(90deg, #c83c3c 0%, #a82d2d 100%);
             border-radius: 2px;
         }
         
@@ -449,44 +568,176 @@
         .chip {
             display: inline-block;
             padding: 6px 14px;
-            border-radius: 20px;
+            border-radius: 15px;
             font-size: 12px;
             font-weight: 600;
             margin-right: 8px;
             margin-bottom: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        .chip-blue {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-        }
-        
-        .chip-green {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+        .chip-brown {
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
         }
         
         .chip-red {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: rgba(200, 60, 60, 0.1);
+            color: #c83c3c;
         }
         
-        .chip-purple {
-            background: rgba(139, 92, 246, 0.1);
-            color: #8b5cf6;
+        .chip-green {
+            background: rgba(45, 92, 45, 0.1);
+            color: #2d5c2d;
+        }
+        
+        .chip-blue {
+            background: rgba(58, 124, 165, 0.1);
+            color: #3a7ca5;
+        }
+        
+        /* 和風圖釘裝飾 */
+        .pin-decoration {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #d4a574, #8b4513);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+        
+        /* 手帳邊角裝飾 */
+        .corner-decoration {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d4a574;
+            border-radius: 0 0 5px 0;
+        }
+        
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 0 0 5px 0;
+            transform: rotate(180deg);
+        }
+        
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 0 0 5px;
+            transform: rotate(270deg);
+        }
+        
+        .corner-bl {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 5px 0 0;
+            transform: rotate(90deg);
+        }
+        
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+            border-radius: 5px 0 0 0;
+            transform: rotate(0deg);
+        }
+        
+        /* 手帳頁面裝飾 */
+        .page-decoration {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            border-radius: 5px;
+            transform: rotate(10deg);
+            opacity: 0.7;
+            z-index: -1;
+        }
+        
+        .page-decoration::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background: #f5e9dd;
+            border-radius: 3px;
+        }
+        
+        /* 日期標籤 */
+        .date-tag {
+            background: linear-gradient(135deg, #c83c3c 0%, #a82d2d 100%);
+            color: #fff8e1;
+            padding: 8px 16px;
+            border-radius: 0 15px 15px 0;
+            position: relative;
+            display: inline-block;
+            margin-left: -20px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .date-tag::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.2), transparent);
+        }
+        
+        /* 和風背景圖案 */
+        .japanese-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(200, 60, 60, 0.05) 1px, transparent 2px),
+                radial-gradient(circle at 90% 80%, rgba(139, 69, 19, 0.05) 1px, transparent 2px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
+    <!-- 和風背景圖案 -->
+    <div class="japanese-pattern"></div>
+    
+    <!-- 頂部裝飾 -->
+    <div class="header-decoration"></div>
+    
+    <!-- 櫻花裝飾 -->
+    <div class="sakura-decoration"></div>
+    
+    <!-- 手帳頁面裝飾 -->
+    <div class="page-decoration"></div>
+    
     <div id="app" class="min-h-screen pb-24">
         <!-- 頂部標題欄 -->
-        <header class="px-5 pt-8 pb-6 text-white">
+        <header class="px-5 pt-10 pb-6 text-white relative">
             <div class="flex justify-between items-center mb-2">
                 <div>
                     <h1 class="text-3xl font-bold">{{ appTitle }}</h1>
                     <div class="flex items-center mt-2">
-                        <i class="fas fa-calendar-alt mr-2 text-blue-200"></i>
-                        <p class="text-blue-200">1月15-18日 • 4日3夜</p>
+                        <i class="fas fa-calendar-alt mr-2 text-red-200"></i>
+                        <p class="text-red-200">1月15-18日 • 4日3夜</p>
                     </div>
                 </div>
                 <button @click="editAppTitle" class="bg-white/20 p-3 rounded-full hover:bg-white/30 transition-colors">
@@ -496,15 +747,20 @@
             
             <!-- 裝飾性標籤 -->
             <div class="flex mt-4">
-                <span class="chip chip-blue">
+                <span class="chip chip-brown">
                     <i class="fas fa-plane mr-1"></i>隨心飛
                 </span>
-                <span class="chip chip-green">
+                <span class="chip chip-red">
                     <i class="fas fa-hotel mr-1"></i>4日3夜
                 </span>
-                <span class="chip chip-purple">
+                <span class="chip chip-green">
                     <i class="fas fa-yen-sign mr-1"></i>預算管理
                 </span>
+            </div>
+            
+            <!-- 日期標籤 -->
+            <div class="date-tag mt-6">
+                <i class="fas fa-book mr-2"></i>旅行手帳
             </div>
         </header>
 
@@ -513,7 +769,8 @@
             <!-- 行程頁面 -->
             <div v-if="activeTab === 'schedule'" class="space-y-6 fade-enter-active">
                 <!-- 航班資訊卡片 -->
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold">航班資訊</h2>
@@ -528,7 +785,7 @@
                         <div class="mb-8">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-gray-900 text-lg">{{ flightInfo.departure.title }}</h3>
-                                <span class="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">{{ flightInfo.departure.type }}</span>
+                                <span class="text-sm bg-red-100 text-red-800 px-3 py-1 rounded-full font-bold">{{ flightInfo.departure.type }}</span>
                             </div>
                             
                             <div class="flight-card">
@@ -541,7 +798,7 @@
                                     </div>
                                     
                                     <div class="text-center">
-                                        <div class="text-xl font-bold text-blue-700">{{ flightInfo.departure.duration }}</div>
+                                        <div class="text-xl font-bold text-red-700">{{ flightInfo.departure.duration }}</div>
                                         <div class="text-sm text-gray-600 mt-1">{{ flightInfo.departure.flightNumber }}</div>
                                         <div class="text-xs text-gray-500 mt-1">
                                             <i class="fas fa-plane"></i> 直飛
@@ -562,7 +819,7 @@
                         <div>
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-gray-900 text-lg">{{ flightInfo.return.title }}</h3>
-                                <span class="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-bold">{{ flightInfo.return.type }}</span>
+                                <span class="text-sm bg-red-100 text-red-800 px-3 py-1 rounded-full font-bold">{{ flightInfo.return.type }}</span>
                             </div>
                             
                             <div class="flight-card">
@@ -575,7 +832,7 @@
                                     </div>
                                     
                                     <div class="text-center">
-                                        <div class="text-xl font-bold text-blue-700">{{ flightInfo.return.duration }}</div>
+                                        <div class="text-xl font-bold text-red-700">{{ flightInfo.return.duration }}</div>
                                         <div class="text-sm text-gray-600 mt-1">{{ flightInfo.return.flightNumber }}</div>
                                         <div class="text-xs text-gray-500 mt-1">
                                             <i class="fas fa-plane"></i> 直飛
@@ -592,10 +849,17 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
                 
                 <!-- 行前清單卡片 -->
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold">行前清單</h2>
@@ -612,12 +876,12 @@
                         </div>
                         
                         <div v-else class="space-y-4">
-                            <div v-for="(item, index) in preTripChecklist" :key="index" class="flex items-center p-4 border border-gray-200 rounded-xl hover:border-blue-300 transition-colors">
+                            <div v-for="(item, index) in preTripChecklist" :key="index" class="flex items-center p-4 border border-gray-200 rounded-xl hover:border-red-300 transition-colors">
                                 <div class="flex items-center mr-4">
                                     <input 
                                         type="checkbox" 
                                         v-model="item.completed"
-                                        class="w-6 h-6 rounded-full border-2 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        class="w-6 h-6 rounded-full border-2 border-gray-300 text-red-600 focus:ring-red-500"
                                     >
                                 </div>
                                 <div class="flex-grow">
@@ -635,10 +899,17 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
                 
                 <!-- 4日行程安排卡片 -->
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold">4日行程安排</h2>
@@ -687,22 +958,22 @@
                             </div>
                             
                             <div v-else class="space-y-4">
-                                <div v-for="(item, index) in selectedDaySchedule.items" :key="index" class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-blue-50 to-white">
+                                <div v-for="(item, index) in selectedDaySchedule.items" :key="index" class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-red-50 to-white">
                                     <div class="flex justify-between items-start">
                                         <div class="flex-grow">
                                             <div class="flex items-center mb-3">
-                                                <div class="font-bold text-blue-700 text-xl mr-4">{{ item.time }}</div>
+                                                <div class="font-bold text-red-700 text-xl mr-4">{{ item.time }}</div>
                                                 <div class="font-bold text-gray-900 text-lg">{{ item.title }}</div>
                                             </div>
                                             <div class="text-sm text-gray-600 mb-2">
-                                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>{{ item.location }}
+                                                <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>{{ item.location }}
                                             </div>
                                             <div v-if="item.note" class="text-sm text-gray-600 bg-yellow-50 p-2 rounded-lg">
                                                 <i class="fas fa-info-circle mr-2 text-yellow-500"></i>{{ item.note }}
                                             </div>
                                         </div>
                                         <div class="flex space-x-2 ml-4">
-                                            <button @click="editScheduleItem(selectedDay, index)" class="text-blue-600 hover:text-blue-800 bg-blue-50 p-2 rounded-lg">
+                                            <button @click="editScheduleItem(selectedDay, index)" class="text-red-600 hover:text-red-800 bg-red-50 p-2 rounded-lg">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button @click="deleteScheduleItem(selectedDay, index)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-lg">
@@ -714,12 +985,19 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
             </div>
 
             <!-- 地圖頁面 -->
             <div v-if="activeTab === 'map'" class="space-y-6 fade-enter-active">
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <h2 class="text-xl font-bold">東京地圖導航</h2>
                     </div>
@@ -727,7 +1005,7 @@
                     <div class="p-5">
                         <div class="mb-4">
                             <div class="flex items-center mb-4">
-                                <i class="fas fa-search text-blue-600 mr-3 text-xl"></i>
+                                <i class="fas fa-search text-red-600 mr-3 text-xl"></i>
                                 <input 
                                     type="text" 
                                     v-model="searchLocation" 
@@ -738,13 +1016,13 @@
                             
                             <div class="grid grid-cols-2 gap-4 mb-6">
                                 <div class="flex items-center">
-                                    <i class="fas fa-map-pin text-blue-600 mr-2"></i>
+                                    <i class="fas fa-map-pin text-red-600 mr-2"></i>
                                     <span class="font-medium">起點：</span>
                                 </div>
                                 <input type="text" v-model="startLocation" placeholder="例如：池袋駅" class="input-enhanced">
                                 
                                 <div class="flex items-center">
-                                    <i class="fas fa-flag text-blue-600 mr-2"></i>
+                                    <i class="fas fa-flag text-red-600 mr-2"></i>
                                     <span class="font-medium">終點：</span>
                                 </div>
                                 <input type="text" v-model="endLocation" placeholder="例如：新宿駅" class="input-enhanced">
@@ -759,55 +1037,69 @@
                         <div class="mt-8">
                             <h3 class="font-bold text-gray-900 text-lg mb-4">行程區域</h3>
                             <div class="grid grid-cols-2 gap-4">
-                                <div @click="searchLocation = '池袋'; searchOnMap()" class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl text-center cursor-pointer border border-blue-100 hover:border-blue-300 transition-all">
-                                    <i class="fas fa-shopping-bag text-blue-600 text-2xl mb-3"></i>
+                                <div @click="searchLocation = '池袋'; searchOnMap()" class="p-4 bg-gradient-to-r from-red-50 to-white rounded-xl text-center cursor-pointer border border-red-100 hover:border-red-300 transition-all">
+                                    <i class="fas fa-shopping-bag text-red-600 text-2xl mb-3"></i>
                                     <div class="font-bold text-gray-900 text-lg">池袋</div>
                                     <div class="text-sm text-gray-600">購物中心</div>
                                 </div>
-                                <div @click="searchLocation = '新宿'; searchOnMap()" class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl text-center cursor-pointer border border-blue-100 hover:border-blue-300 transition-all">
-                                    <i class="fas fa-tower-observation text-blue-600 text-2xl mb-3"></i>
+                                <div @click="searchLocation = '新宿'; searchOnMap()" class="p-4 bg-gradient-to-r from-red-50 to-white rounded-xl text-center cursor-pointer border border-red-100 hover:border-red-300 transition-all">
+                                    <i class="fas fa-tower-observation text-red-600 text-2xl mb-3"></i>
                                     <div class="font-bold text-gray-900 text-lg">新宿</div>
                                     <div class="text-sm text-gray-600">觀景地標</div>
                                 </div>
-                                <div @click="searchLocation = '澀谷'; searchOnMap()" class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl text-center cursor-pointer border border-blue-100 hover:border-blue-300 transition-all">
-                                    <i class="fas fa-shopping-cart text-blue-600 text-2xl mb-3"></i>
+                                <div @click="searchLocation = '澀谷'; searchOnMap()" class="p-4 bg-gradient-to-r from-red-50 to-white rounded-xl text-center cursor-pointer border border-red-100 hover:border-red-300 transition-all">
+                                    <i class="fas fa-shopping-cart text-red-600 text-2xl mb-3"></i>
                                     <div class="font-bold text-gray-900 text-lg">澀谷</div>
                                     <div class="text-sm text-gray-600">購物天堂</div>
                                 </div>
-                                <div @click="searchLocation = '橫濱'; searchOnMap()" class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl text-center cursor-pointer border border-blue-100 hover:border-blue-300 transition-all">
-                                    <i class="fas fa-music text-blue-600 text-2xl mb-3"></i>
+                                <div @click="searchLocation = '橫濱'; searchOnMap()" class="p-4 bg-gradient-to-r from-red-50 to-white rounded-xl text-center cursor-pointer border border-red-100 hover:border-red-300 transition-all">
+                                    <i class="fas fa-music text-red-600 text-2xl mb-3"></i>
                                     <div class="font-bold text-gray-900 text-lg">橫濱</div>
                                     <div class="text-sm text-gray-600">演唱會場地</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
                 
                 <!-- 地圖連結 -->
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <h2 class="text-xl font-bold">行程地點地圖</h2>
                     </div>
                     <div class="p-5">
                         <p class="text-gray-600 mb-6">您標記的池袋、新宿、澀谷地點</p>
-                        <a href="https://maps.app.goo.gl/1ZvA8hVro3fwYcPf6?g_st=ac" target="_blank" class="block w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl text-center font-bold text-lg shadow-lg hover:shadow-xl transition-all">
+                        <a href="https://maps.app.goo.gl/1ZvA8hVro3fwYcPf6?g_st=ac" target="_blank" class="block w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-4 rounded-xl text-center font-bold text-lg shadow-lg hover:shadow-xl transition-all">
                             <i class="fas fa-map-marked-alt mr-3"></i>打開Google地圖
                         </a>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
             </div>
 
             <!-- 記帳頁面 -->
             <div v-if="activeTab === 'budget'" class="space-y-6 fade-enter-active">
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <h2 class="text-xl font-bold">旅費管理</h2>
                     </div>
                     
                     <div class="p-5">
                         <!-- 預算設置 -->
-                        <div class="mb-8 p-5 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100">
+                        <div class="mb-8 p-5 bg-gradient-to-r from-red-50 to-white rounded-xl border border-red-100">
                             <h3 class="font-bold text-gray-900 text-lg mb-4">預算設置</h3>
                             <div class="flex items-center space-x-4 mb-4">
                                 <div class="flex-grow">
@@ -824,7 +1116,7 @@
                             <div class="mt-2 text-gray-700">
                                 <div class="flex justify-between mb-2">
                                     <span>已花費</span>
-                                    <span class="font-bold text-blue-700">¥{{ totalExpenses.toLocaleString() }} <span class="hkd-amount">(約 HKD {{ calculateHKD(totalExpenses) }})</span></span>
+                                    <span class="font-bold text-red-700">¥{{ totalExpenses.toLocaleString() }} <span class="hkd-amount">(約 HKD {{ calculateHKD(totalExpenses) }})</span></span>
                                 </div>
                                 <div class="flex justify-between mb-4">
                                     <span>剩餘預算</span>
@@ -850,7 +1142,7 @@
                                 v-for="day in expenseDays" 
                                 :key="day.id"
                                 @click="selectedExpenseDay = day.id"
-                                :class="['px-5 py-2 rounded-full mr-3 whitespace-nowrap font-medium', selectedExpenseDay === day.id ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-200 text-gray-700']"
+                                :class="['px-5 py-2 rounded-full mr-3 whitespace-nowrap font-medium', selectedExpenseDay === day.id ? 'bg-red-600 text-white shadow-md' : 'bg-gray-200 text-gray-700']"
                             >
                                 {{ day.name }}
                             </button>
@@ -862,7 +1154,7 @@
                                 v-for="method in paymentMethods" 
                                 :key="method.id"
                                 @click="selectedPaymentMethod = method.id"
-                                :class="['px-5 py-2 rounded-full mr-3 whitespace-nowrap font-medium', selectedPaymentMethod === method.id ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-200 text-gray-700']"
+                                :class="['px-5 py-2 rounded-full mr-3 whitespace-nowrap font-medium', selectedPaymentMethod === method.id ? 'bg-red-600 text-white shadow-md' : 'bg-gray-200 text-gray-700']"
                             >
                                 {{ method.name }}
                             </button>
@@ -875,12 +1167,12 @@
                         </div>
                         
                         <div v-else class="space-y-4 mb-8">
-                            <div v-for="(expense, index) in filteredExpenses" :key="index" class="p-4 border border-gray-200 rounded-xl bg-white hover:border-blue-300 transition-colors">
+                            <div v-for="(expense, index) in filteredExpenses" :key="index" class="p-4 border border-gray-200 rounded-xl bg-white hover:border-red-300 transition-colors">
                                 <div class="flex justify-between items-center">
                                     <div>
                                         <div class="font-bold text-gray-900 text-lg">{{ expense.description }}</div>
                                         <div class="text-sm text-gray-600 mt-1">
-                                            <span class="chip chip-blue">{{ getCategoryName(expense.category) }}</span>
+                                            <span class="chip chip-brown">{{ getCategoryName(expense.category) }}</span>
                                             <span class="chip chip-green">{{ getPaymentMethodName(expense.paymentMethod) }}</span>
                                         </div>
                                     </div>
@@ -911,12 +1203,19 @@
                             <i class="fas fa-plus mr-3"></i>記一筆
                         </button>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
             </div>
 
             <!-- 購物清單頁面 -->
             <div v-if="activeTab === 'shopping'" class="space-y-6 fade-enter-active">
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold">購物清單</h2>
@@ -954,7 +1253,7 @@
                                             <i class="fas fa-store mr-2"></i>{{ item.store }}
                                         </div>
                                         <div class="text-sm text-gray-600 flex items-center">
-                                            <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>{{ item.location }}
+                                            <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>{{ item.location }}
                                         </div>
                                     </div>
                                     
@@ -979,13 +1278,13 @@
                                         <input 
                                             type="checkbox" 
                                             v-model="item.purchased"
-                                            class="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            class="w-5 h-5 rounded border-2 border-gray-300 text-red-600 focus:ring-red-500"
                                             id="purchased-checkbox"
                                         >
                                         <label for="purchased-checkbox" class="ml-3 text-gray-700 font-medium">標記為已購買</label>
                                     </div>
                                     <div class="flex space-x-3">
-                                        <button @click="editShoppingItem(index)" class="text-blue-600 hover:text-blue-800 bg-blue-50 p-2 rounded-lg">
+                                        <button @click="editShoppingItem(index)" class="text-red-600 hover:text-red-800 bg-red-50 p-2 rounded-lg">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button @click="deleteShoppingItem(index)" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-lg">
@@ -996,6 +1295,12 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
             </div>
 
@@ -1030,7 +1335,8 @@
                     </button>
                 </div>
                 
-                <div class="card">
+                <div class="card relative">
+                    <div class="pin-decoration"></div>
                     <div class="card-header">
                         <h2 class="text-xl font-bold">旅行資訊</h2>
                     </div>
@@ -1040,12 +1346,12 @@
                         <div class="mb-8">
                             <h3 class="font-bold text-gray-900 text-lg mb-4">匯率（今日）</h3>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="p-4 border border-gray-200 rounded-xl text-center bg-gradient-to-r from-blue-50 to-white">
+                                <div class="p-4 border border-gray-200 rounded-xl text-center bg-gradient-to-r from-red-50 to-white">
                                     <div class="text-sm text-gray-600 mb-2">港幣 HKD</div>
                                     <div class="font-bold text-gray-900 text-xl">1 HKD ≈ {{ exchangeRates.hkd }} JPY</div>
                                     <div class="text-xs text-gray-500 mt-2">1 JPY ≈ {{ (1/exchangeRates.hkd).toFixed(3) }} HKD</div>
                                 </div>
-                                <div class="p-4 border border-gray-200 rounded-xl text-center bg-gradient-to-r from-blue-50 to-white">
+                                <div class="p-4 border border-gray-200 rounded-xl text-center bg-gradient-to-r from-red-50 to-white">
                                     <div class="text-sm text-gray-600 mb-2">新台幣 TWD</div>
                                     <div class="font-bold text-gray-900 text-xl">1 TWD ≈ {{ exchangeRates.twd }} JPY</div>
                                     <div class="text-xs text-gray-500 mt-2">1 JPY ≈ {{ (1/exchangeRates.twd).toFixed(3) }} TWD</div>
@@ -1057,28 +1363,28 @@
                         <div>
                             <h3 class="font-bold text-gray-900 text-lg mb-4">實用資訊</h3>
                             <div class="space-y-4">
-                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-blue-50 to-white">
+                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-red-50 to-white">
                                     <div class="flex items-center mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                                            <i class="fas fa-train text-blue-600"></i>
+                                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                            <i class="fas fa-train text-red-600"></i>
                                         </div>
                                         <div class="font-bold text-gray-900">交通IC卡</div>
                                     </div>
                                     <div class="text-gray-600">Suica或Pasmo卡可用於地鐵、巴士和購物。</div>
                                 </div>
-                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-blue-50 to-white">
+                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-red-50 to-white">
                                     <div class="flex items-center mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                                            <i class="fas fa-credit-card text-blue-600"></i>
+                                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                            <i class="fas fa-credit-card text-red-600"></i>
                                         </div>
                                         <div class="font-bold text-gray-900">支付方式</div>
                                     </div>
                                     <div class="text-gray-600">現金、IC卡、信用卡、Alipay在東京普遍接受。</div>
                                 </div>
-                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-blue-50 to-white">
+                                <div class="p-4 border border-gray-200 rounded-xl bg-gradient-to-r from-red-50 to-white">
                                     <div class="flex items-center mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                                            <i class="fas fa-shopping-cart text-blue-600"></i>
+                                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                            <i class="fas fa-shopping-cart text-red-600"></i>
                                         </div>
                                         <div class="font-bold text-gray-900">免稅購物</div>
                                     </div>
@@ -1087,6 +1393,12 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 邊角裝飾 -->
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
                 </div>
             </div>
         </main>
@@ -1107,7 +1419,6 @@
         </nav>
 
         <!-- 模態框區域 -->
-        
         <!-- 編輯應用標題模態框 -->
         <div v-if="showEditTitleModal" class="modal-overlay">
             <div class="modal-content">
@@ -1445,7 +1756,7 @@
         createApp({
             setup() {
                 // 應用標題
-                const appTitle = ref('東京4日3夜之旅');
+                const appTitle = ref('東京4日3夜旅行手帳');
                 const showEditTitleModal = ref(false);
                 
                 // 活動頁面
@@ -2100,14 +2411,14 @@
                             datasets: [{
                                 data: Object.values(categoryTotals),
                                 backgroundColor: [
-                                    '#3b82f6', // 藍色
-                                    '#10b981', // 綠色
-                                    '#f59e0b', // 黃色
-                                    '#ef4444', // 紅色
-                                    '#8b5cf6', // 紫色
-                                    '#f97316', // 橙色
-                                    '#06b6d4', // 青色
-                                    '#ec4899', // 粉色
+                                    '#c83c3c', // 紅色
+                                    '#8b4513', // 棕色
+                                    '#2d5c2d', // 綠色
+                                    '#3a7ca5', // 藍色
+                                    '#a0522d', // 土黃色
+                                    '#d4a574', // 米黃色
+                                    '#a82d2d', // 深紅色
+                                    '#5c3c2d', // 深棕色
                                     '#64748b'  // 灰色
                                 ],
                                 borderWidth: 2,
