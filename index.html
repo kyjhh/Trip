@@ -3,264 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東京旅行助手 - 4日3夜藍色風格</title>
+    <title>eMenu Tokyo - 東京旅行助手</title>
     <!-- 引入 Vue.js -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google 字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- 引入 Font Awesome 圖標 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #1e88e5;
-            --dark-blue: #1565c0;
-            --light-blue: #e3f2fd;
-            --accent-blue: #42a5f5;
-            --secondary-blue: #90caf9;
-            --gray-blue: #546e7a;
-            --success-green: #4caf50;
-            --warning-orange: #ff9800;
-            --danger-red: #f44336;
+            --primary-blue: #2563eb;
+            --dark-blue: #1e40af;
+            --light-blue: #dbeafe;
+            --accent-blue: #3b82f6;
+            --danger-red: #ef4444;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
         }
         
         * {
-            font-family: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: #f8fafc;
+            color: #1e293b;
             max-width: 480px;
             margin: 0 auto;
             min-height: 100vh;
             position: relative;
         }
         
-        /* 藍色風格卡片 */
-        .card-blue {
+        /* 卡片樣式 */
+        .card {
             background-color: white;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(30, 136, 229, 0.1);
-            border-top: 4px solid var(--primary-blue);
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08);
             position: relative;
             overflow: hidden;
         }
         
-        .card-blue:hover {
-            box-shadow: 0 4px 12px rgba(30, 136, 229, 0.15);
+        .card-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 20px;
         }
         
-        /* 藍色標題 */
-        .header-blue {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header-blue::after {
-            content: "";
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-        }
-        
-        /* 選項卡 */
-        .tab-active {
-            color: var(--primary-blue);
-            border-bottom: 3px solid var(--primary-blue);
-            font-weight: 600;
-        }
-        
-        /* 按鈕 */
+        /* 按鈕樣式 */
         .btn-primary {
             background-color: var(--primary-blue);
             color: white;
             border-radius: 8px;
             padding: 10px 16px;
-            font-weight: 500;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.2s;
         }
         
         .btn-primary:hover {
             background-color: var(--dark-blue);
-            transform: translateY(-1px);
         }
         
-        .btn-danger {
-            background-color: var(--danger-red);
-            color: white;
+        .btn-outline {
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
             border-radius: 8px;
-            padding: 8px 16px;
+            padding: 10px 16px;
             font-weight: 500;
+            transition: all 0.2s;
         }
         
-        .btn-danger:hover {
-            background-color: #d32f2f;
+        .btn-outline:hover {
+            background-color: var(--light-blue);
         }
         
-        /* 輸入框 */
+        /* 優先級標籤 */
+        .priority-tag {
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .priority-high {
+            background-color: #fee2e2;
+            color: var(--danger-red);
+        }
+        
+        .priority-medium {
+            background-color: #fef3c7;
+            color: var(--warning-orange);
+        }
+        
+        .priority-low {
+            background-color: #d1fae5;
+            color: var(--success-green);
+        }
+        
+        /* 輸入框樣式 */
         .input-field {
-            border: 1px solid #e0e0e0;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 16px;
-            transition: all 0.3s;
+            padding: 10px 14px;
+            font-size: 15px;
+            transition: all 0.2s;
+            width: 100%;
         }
         
         .input-field:focus {
             border-color: var(--primary-blue);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
         
         /* 底部導航 */
         .nav-bottom {
             background-color: white;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
         
-        /* 航班信息樣式 */
+        .nav-item {
+            padding: 12px 0;
+            font-size: 12px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-blue);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* 航班卡片樣式 */
         .flight-card {
-            background: linear-gradient(to right, #e3f2fd, #bbdefb);
-            border-radius: 12px;
+            background-color: var(--light-blue);
+            border-radius: 10px;
             padding: 16px;
-            position: relative;
         }
         
         .flight-time {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 700;
             color: var(--dark-blue);
-        }
-        
-        .flight-airport {
-            font-size: 14px;
-            color: var(--gray-blue);
-        }
-        
-        .flight-duration {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        
-        /* 優先級標籤 */
-        .priority-high {
-            background-color: #ffebee;
-            color: var(--danger-red);
-            border-radius: 12px;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .priority-medium {
-            background-color: #fff3e0;
-            color: var(--warning-orange);
-            border-radius: 12px;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .priority-low {
-            background-color: #e8f5e9;
-            color: var(--success-green);
-            border-radius: 12px;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 500;
         }
         
         /* 天氣卡片 */
         .weather-card {
-            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
             color: white;
             border-radius: 12px;
-            padding: 16px;
+            padding: 20px;
         }
         
-        /* 動畫 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* 圖片上傳預覽 */
-        .image-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            cursor: pointer;
-        }
-        
-        .image-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        
-        /* 刪除按鈕 */
-        .delete-btn {
-            color: #999;
-            transition: all 0.2s;
-        }
-        
-        .delete-btn:hover {
-            color: var(--danger-red);
-            transform: scale(1.1);
-        }
-        
-        /* 日曆樣式 */
-        .calendar-day {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .calendar-day.active {
-            background-color: var(--primary-blue);
-            color: white;
-        }
-        
-        /* 滾動條自定義 */
+        /* 自定義滾動條 */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
-            border-radius: 10px;
+            border-radius: 5px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: var(--secondary-blue);
-            border-radius: 10px;
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+        
+        /* 動畫效果 */
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.3s;
+        }
+        
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+        }
+        
+        /* 進度條 */
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-blue);
+            transition: width 0.5s;
+        }
+        
+        /* 彈出層 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         /* 響應式調整 */
@@ -272,130 +229,82 @@
     </style>
 </head>
 <body>
-    <div id="app" class="min-h-screen pb-24">
-        <!-- 頂部導航欄 -->
-        <header class="header-blue px-4 py-5">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                        <i class="fas fa-plane text-white"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold">東京4日3夜之旅</h1>
-                        <p class="text-sm opacity-90">池袋·新宿·澀谷·橫濱</p>
-                    </div>
+    <div id="app" class="min-h-screen pb-20">
+        <!-- 頂部標題欄 -->
+        <header class="px-5 py-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">eMenu Tokyo</h1>
+                    <p class="text-gray-600 text-sm">東京4日3夜之旅 • 11月16-19日</p>
                 </div>
-                <div class="text-right">
-                    <div class="text-sm">11月16-19日</div>
-                    <div class="text-xs opacity-80">4天3夜</div>
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-plane text-blue-600"></i>
                 </div>
             </div>
             
-            <!-- 航班信息 -->
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <!-- 出發航班 -->
-                <div class="flight-card">
-                    <div class="text-sm font-medium text-gray-600 mb-2">出發 · 隨心飛</div>
-                    <div class="flex justify-between items-center">
-                        <div class="text-center">
-                            <div class="flight-time">10:50</div>
-                            <div class="flight-airport">HKG</div>
-                            <div class="text-xs mt-1">香港國際機場<br>客運大樓 1</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="flight-duration">4h 5m</div>
-                            <div class="text-xs mt-1">U0870</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="flight-time">15:55</div>
-                            <div class="flight-airport">NRT</div>
-                            <div class="text-xs mt-1">成田國際機場<br>客運大樓 2</div>
-                        </div>
-                    </div>
+            <!-- 航班簡要資訊 -->
+            <div class="flight-card mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="text-sm font-medium text-gray-700">去程航班 • 隨心飛</div>
+                    <div class="text-xs font-medium px-2 py-1 bg-blue-500 text-white rounded-full">已確認</div>
                 </div>
-                
-                <!-- 回程航班 -->
-                <div class="flight-card">
-                    <div class="text-sm font-medium text-gray-600 mb-2">回程 · 隨心飛</div>
-                    <div class="flex justify-between items-center">
-                        <div class="text-center">
-                            <div class="flight-time">23:55</div>
-                            <div class="flight-airport">HND</div>
-                            <div class="text-xs mt-1">羽田國際機場<br>客運大樓 3</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="flight-duration">5h 20m</div>
-                            <div class="text-xs mt-1">U0623</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="flight-time">04:15</div>
-                            <div class="flight-airport">HKG</div>
-                            <div class="text-xs mt-1">香港國際機場<br>客運大樓 1</div>
-                        </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-center">
+                        <div class="flight-time">10:50</div>
+                        <div class="text-xs text-gray-600 mt-1">HKG</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-gray-700">4h 5m</div>
+                        <div class="text-xs text-gray-500 mt-1">U0870</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="flight-time">15:55</div>
+                        <div class="text-xs text-gray-600 mt-1">NRT</div>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- 主內容區域 -->
-        <main class="px-4 -mt-4 relative z-10">
-            <!-- 功能選項卡 -->
-            <div class="flex justify-between mb-6 overflow-x-auto pb-2">
-                <button 
-                    v-for="tab in tabs" 
-                    :key="tab.id"
-                    @click="activeTab = tab.id"
-                    :class="['px-4 py-2 text-lg font-medium transition-all whitespace-nowrap', activeTab === tab.id ? 'tab-active' : 'text-gray-500']"
-                >
-                    <i :class="tab.icon" class="mr-2"></i>{{ tab.name }}
-                </button>
-            </div>
-
+        <main class="px-5">
             <!-- 行程表頁面 -->
-            <div v-if="activeTab === 'schedule'" class="space-y-6 fade-in">
+            <div v-if="activeTab === 'schedule'" class="space-y-6">
                 <!-- 行前清單卡片 -->
-                <div class="card-blue p-5 mb-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold" style="color: var(--primary-blue);">行前清單</h2>
-                        <button @click="showAddChecklist = true" class="btn-primary py-2 px-4">
-                            <i class="fas fa-plus mr-1"></i> 新增
-                        </button>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-bold text-gray-900">行前清單</h2>
+                            <button @click="showAddChecklistModal = true" class="btn-primary py-2 px-4 text-sm">
+                                <i class="fas fa-plus mr-1"></i>新增
+                            </button>
+                        </div>
                     </div>
                     
-                    <div v-if="preTripChecklist.length === 0" class="text-center py-8 text-gray-500">
-                        <i class="fas fa-clipboard-list text-4xl mb-3" style="color: #ccc;"></i>
-                        <p>還沒有行前準備事項</p>
-                    </div>
-                    
-                    <div v-else class="space-y-3">
-                        <div v-for="(item, index) in preTripChecklist" :key="index" class="p-4 rounded-lg border border-gray-200 hover:border-blue-200 transition-all">
-                            <div class="flex justify-between items-start">
-                                <div class="flex items-start space-x-3 flex-grow">
+                    <div class="p-5">
+                        <div v-if="preTripChecklist.length === 0" class="text-center py-8">
+                            <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500">還沒有行前準備事項</p>
+                        </div>
+                        
+                        <div v-else class="space-y-4">
+                            <div v-for="(item, index) in preTripChecklist" :key="index" class="flex items-start p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center mr-3 mt-1">
                                     <input 
                                         type="checkbox" 
                                         v-model="item.completed"
-                                        class="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                     >
-                                    <div class="flex-grow">
-                                        <div :class="['font-medium', item.completed ? 'line-through text-gray-500' : '']">
-                                            {{ item.name }}
-                                        </div>
-                                        <div class="mt-2 flex items-center space-x-2">
-                                            <!-- 優先級選擇 -->
-                                            <select v-model="item.priority" class="text-xs px-2 py-1 rounded border border-gray-300">
-                                                <option value="high">重要</option>
-                                                <option value="medium">中等</option>
-                                                <option value="low">一般</option>
-                                            </select>
-                                            <!-- 優先級顯示 -->
-                                            <span :class="getPriorityClass(item.priority)" class="text-xs font-medium">
-                                                {{ getPriorityText(item.priority) }}
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="flex-grow">
+                                    <div :class="['font-medium', item.completed ? 'line-through text-gray-500' : '']">
+                                        {{ item.name }}
                                     </div>
                                 </div>
-                                <!-- 刪除按鈕 -->
-                                <button @click="deleteChecklistItem(index)" class="delete-btn ml-2">
+                                <!-- 只顯示一個優先級標籤 -->
+                                <div :class="['priority-tag', `priority-${item.priority}`]">
+                                    {{ getPriorityText(item.priority) }}
+                                </div>
+                                <button @click="deleteChecklistItem(index)" class="ml-3 text-gray-400 hover:text-red-500">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -403,61 +312,64 @@
                     </div>
                 </div>
                 
-                <!-- 4日行程安排 -->
-                <div class="card-blue p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold" style="color: var(--primary-blue);">4日行程安排</h2>
-                        <div class="text-sm text-gray-600">
-                            <i class="fas fa-calendar-alt mr-1"></i>11月16-19日
-                        </div>
-                    </div>
-                    
-                    <!-- 日期選擇 -->
-                    <div class="flex justify-between mb-6 overflow-x-auto pb-2">
-                        <button 
-                            v-for="day in tripDays" 
-                            :key="day.id"
-                            @click="selectedDay = day.id"
-                            :class="['px-4 py-2 rounded-lg flex flex-col items-center min-w-20', selectedDay === day.id ? 'bg-blue-100 text-blue-700 font-bold' : 'bg-gray-100 text-gray-700']"
-                        >
-                            <div class="text-lg">{{ day.date }}</div>
-                            <div class="text-sm">{{ day.day }}</div>
-                            <div class="text-xs mt-1">{{ day.area }}</div>
-                        </button>
-                    </div>
-                    
-                    <!-- 天氣資訊 -->
-                    <div class="weather-card mb-6">
+                <!-- 4日行程安排卡片 -->
+                <div class="card">
+                    <div class="card-header">
                         <div class="flex justify-between items-center">
-                            <div>
-                                <div class="text-lg font-bold">東京天氣</div>
-                                <div class="text-sm">{{ selectedDayWeather.temp }}°C, {{ selectedDayWeather.condition }}</div>
-                                <div class="text-xs mt-1">更新於 {{ selectedDayWeather.updateTime }}</div>
-                            </div>
-                            <i :class="selectedDayWeather.icon" class="text-4xl"></i>
+                            <h2 class="text-lg font-bold text-gray-900">行程安排</h2>
+                            <button @click="showAddScheduleItemModal = true" class="btn-outline py-2 px-4 text-sm">
+                                <i class="fas fa-plus mr-1"></i>新增活動
+                            </button>
                         </div>
-                        <button @click="fetchWeather" class="text-xs bg-white/20 px-3 py-1 rounded-full mt-2">
-                            <i class="fas fa-sync-alt mr-1"></i> 更新天氣
-                        </button>
                     </div>
                     
-                    <!-- 當日行程 -->
-                    <div v-if="selectedDaySchedule" class="space-y-4">
-                        <div v-for="(item, index) in selectedDaySchedule.items" :key="index" class="p-4 rounded-lg border border-gray-200 bg-blue-50/30">
-                            <div class="flex justify-between">
-                                <div class="flex-grow">
-                                    <div class="font-bold text-lg" style="color: var(--dark-blue);">{{ item.time }}</div>
-                                    <div class="text-gray-800 font-medium mt-1">{{ item.title }}</div>
-                                    <div class="text-sm text-gray-600 mt-1">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
-                                    </div>
-                                    <div v-if="item.note" class="text-sm text-gray-600 mt-1">
-                                        <i class="fas fa-info-circle mr-1"></i>{{ item.note }}
+                    <div class="p-5">
+                        <!-- 日期選擇 -->
+                        <div class="flex mb-6 overflow-x-auto pb-2">
+                            <div 
+                                v-for="day in tripDays" 
+                                :key="day.id"
+                                @click="selectedDay = day.id"
+                                :class="['flex-shrink-0 flex flex-col items-center px-4 py-2 rounded-lg mr-2 cursor-pointer', selectedDay === day.id ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700']"
+                            >
+                                <div class="font-bold text-lg">{{ day.date }}</div>
+                                <div class="text-sm">{{ day.day }}</div>
+                                <div class="text-xs mt-1">{{ day.area }}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 當日行程 -->
+                        <div v-if="selectedDaySchedule">
+                            <div v-if="selectedDaySchedule.items.length === 0" class="text-center py-8 text-gray-500">
+                                <i class="fas fa-calendar-day text-3xl mb-3"></i>
+                                <p>這一天還沒有安排行程</p>
+                            </div>
+                            
+                            <div v-else class="space-y-4">
+                                <div v-for="(item, index) in selectedDaySchedule.items" :key="index" class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-grow">
+                                            <div class="flex items-center mb-2">
+                                                <div class="font-bold text-blue-700 text-lg mr-3">{{ item.time }}</div>
+                                                <div class="font-medium text-gray-900">{{ item.title }}</div>
+                                            </div>
+                                            <div class="text-sm text-gray-600 mb-1">
+                                                <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                                            </div>
+                                            <div v-if="item.note" class="text-sm text-gray-600">
+                                                <i class="fas fa-info-circle mr-1"></i>{{ item.note }}
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button @click="editScheduleItem(selectedDay, index)" class="text-blue-600 hover:text-blue-800">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button @click="deleteScheduleItem(selectedDay, index)" class="text-red-500 hover:text-red-700">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <button @click="showNavigation(item.location)" class="text-blue-600 ml-2">
-                                    <i class="fas fa-directions text-lg"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -465,373 +377,297 @@
             </div>
 
             <!-- 地圖頁面 -->
-            <div v-if="activeTab === 'map'" class="space-y-6 fade-in">
-                <!-- 地圖搜尋卡片 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">東京地圖導航</h2>
+            <div v-if="activeTab === 'map'" class="space-y-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-lg font-bold text-gray-900">東京地圖</h2>
+                    </div>
                     
-                    <div class="mb-4">
-                        <div class="flex items-center mb-3">
-                            <i class="fas fa-search mr-2" style="color: var(--primary-blue);"></i>
-                            <input 
-                                type="text" 
-                                v-model="searchLocation" 
-                                placeholder="搜尋東京地點..." 
-                                class="input-field flex-grow"
-                            >
+                    <div class="p-5">
+                        <div class="mb-4">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-search text-blue-600 mr-2"></i>
+                                <input 
+                                    type="text" 
+                                    v-model="searchLocation" 
+                                    placeholder="搜尋東京地點..." 
+                                    class="input-field"
+                                >
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-map-pin text-blue-600 mr-2"></i>
+                                    <span class="font-medium">起點：</span>
+                                </div>
+                                <input type="text" v-model="startLocation" placeholder="例如：池袋駅" class="input-field">
+                                
+                                <div class="flex items-center">
+                                    <i class="fas fa-flag text-blue-600 mr-2"></i>
+                                    <span class="font-medium">終點：</span>
+                                </div>
+                                <input type="text" v-model="endLocation" placeholder="例如：新宿駅" class="input-field">
+                            </div>
+                            
+                            <button @click="openGoogleMaps" class="btn-primary w-full py-3">
+                                <i class="fas fa-directions mr-2"></i>開始導航
+                            </button>
                         </div>
                         
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="flex items-center">
-                                <i class="fas fa-map-pin mr-2" style="color: var(--primary-blue);"></i>
-                                <span class="font-medium">起點：</span>
-                            </div>
-                            <input type="text" v-model="startLocation" placeholder="例如：池袋駅" class="input-field">
-                            
-                            <div class="flex items-center">
-                                <i class="fas fa-flag mr-2" style="color: var(--primary-blue);"></i>
-                                <span class="font-medium">終點：</span>
-                            </div>
-                            <input type="text" v-model="endLocation" placeholder="例如：新宿駅" class="input-field">
-                        </div>
-                    </div>
-                    
-                    <button @click="openGoogleMaps" class="btn-primary w-full">
-                        <i class="fab fa-google mr-2"></i> 開啟 Google 地圖導航
-                    </button>
-                </div>
-                
-                <!-- 主要區域地圖 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">主要活動區域</h2>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div 
-                            v-for="area in mainAreas" 
-                            :key="area.id"
-                            class="bg-blue-50 rounded-xl p-4 text-center cursor-pointer hover:bg-blue-100 transition-colors"
-                            @click="setNavigationArea(area.name)"
-                        >
-                            <div class="text-2xl mb-2">{{ area.icon }}</div>
-                            <div class="font-bold">{{ area.name }}</div>
-                            <div class="text-xs text-gray-600 mt-1">{{ area.description }}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 交通資訊 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">東京交通資訊</h2>
-                    <div class="space-y-3">
-                        <div v-for="(route, index) in transportRoutes" :key="index" class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" :style="{ backgroundColor: route.color }">
-                                <i :class="route.icon" class="text-white"></i>
-                            </div>
-                            <div class="flex-grow">
-                                <div class="font-bold">{{ route.name }}</div>
-                                <div class="text-sm text-gray-600">{{ route.from }} → {{ route.to }}</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="font-bold">{{ route.time }}</div>
-                                <div class="text-sm text-gray-600">{{ route.cost }}</div>
+                        <!-- 地圖熱點區域 -->
+                        <div class="mt-6">
+                            <h3 class="font-bold text-gray-900 mb-3">熱門區域</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                    <i class="fas fa-shopping-bag text-blue-600 text-lg mb-1"></i>
+                                    <div class="font-medium text-gray-900">澀谷</div>
+                                    <div class="text-xs text-gray-600">購物中心</div>
+                                </div>
+                                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                    <i class="fas fa-torii-gate text-blue-600 text-lg mb-1"></i>
+                                    <div class="font-medium text-gray-900">淺草</div>
+                                    <div class="text-xs text-gray-600">傳統寺廟</div>
+                                </div>
+                                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                    <i class="fas fa-tower-observation text-blue-600 text-lg mb-1"></i>
+                                    <div class="font-medium text-gray-900">東京鐵塔</div>
+                                    <div class="text-xs text-gray-600">觀景地標</div>
+                                </div>
+                                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                    <i class="fas fa-utensils text-blue-600 text-lg mb-1"></i>
+                                    <div class="font-medium text-gray-900">新宿</div>
+                                    <div class="text-xs text-gray-600">美食天堂</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 記帳功能頁面 -->
-            <div v-if="activeTab === 'accounting'" class="space-y-6 fade-in">
-                <!-- 新增支出卡片 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">新增支出</h2>
+            <!-- 記帳頁面 -->
+            <div v-if="activeTab === 'budget'" class="space-y-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-lg font-bold text-gray-900">旅費管理</h2>
+                    </div>
                     
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-gray-700 mb-1">項目名稱</label>
-                            <input type="text" v-model="newExpense.name" placeholder="輸入項目名稱" class="input-field w-full">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 mb-1">金額 (¥)</label>
-                            <input type="number" v-model="newExpense.amount" placeholder="輸入金額" class="input-field w-full">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 mb-1">付款方式</label>
-                            <div class="grid grid-cols-2 gap-3 mt-2">
-                                <div 
-                                    v-for="method in paymentMethods" 
-                                    :key="method.id"
-                                    @click="newExpense.paymentMethod = method.id"
-                                    :class="['flex flex-col items-center justify-center p-3 rounded-lg border-2', newExpense.paymentMethod === method.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200']"
-                                >
-                                    <i :class="method.icon" class="text-2xl mb-2" :style="{color: method.color}"></i>
-                                    <span class="text-sm font-medium">{{ method.name }}</span>
+                    <div class="p-5">
+                        <!-- 預算設置 -->
+                        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                            <h3 class="font-bold text-gray-900 mb-2">預算設置</h3>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-grow">
+                                    <input 
+                                        type="number" 
+                                        v-model="budget" 
+                                        placeholder="輸入總預算（日圓）" 
+                                        class="input-field"
+                                        @change="saveBudget"
+                                    >
                                 </div>
+                                <span class="font-medium text-gray-700">¥</span>
                             </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-gray-700 mb-1">日期</label>
-                                <select v-model="newExpense.day" class="input-field w-full">
-                                    <option value="day1">11月16日 (Day 1)</option>
-                                    <option value="day2">11月17日 (Day 2)</option>
-                                    <option value="day3">11月18日 (Day 3)</option>
-                                    <option value="day4">11月19日 (Day 4)</option>
-                                </select>
+                            <div class="mt-2 text-sm text-gray-600">
+                                您還可以花費 <span class="font-bold text-blue-700">¥{{ remainingBudget.toLocaleString() }}</span>
                             </div>
                             
-                            <div>
-                                <label class="block text-gray-700 mb-1">類別</label>
-                                <select v-model="newExpense.category" class="input-field w-full">
-                                    <option value="food">飲食</option>
-                                    <option value="transportation">交通</option>
-                                    <option value="shopping">購物</option>
-                                    <option value="attraction">景點門票</option>
-                                    <option value="accommodation">住宿</option>
-                                    <option value="merchandise">周邊</option>
-                                    <option value="flight">機票</option>
-                                    <option value="insurance">保險</option>
-                                    <option value="other">其他</option>
-                                </select>
+                            <!-- 預算進度條 -->
+                            <div class="mt-4">
+                                <div class="flex justify-between text-sm text-gray-700 mb-1">
+                                    <span>預算使用情況</span>
+                                    <span>{{ budgetUsedPercentage }}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" :style="{ width: budgetUsedPercentage + '%' }"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <button @click="addExpense" class="btn-primary w-full mt-6">
-                        <i class="fas fa-plus mr-2"></i> 新增支出
-                    </button>
-                </div>
-                
-                <!-- 支出統計 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">支出統計</h2>
-                    
-                    <div class="grid grid-cols-3 gap-3 mb-4">
-                        <div class="text-center p-3 rounded-lg bg-blue-50">
-                            <div class="text-xl font-bold" style="color: var(--primary-blue);">¥ {{ totalExpenses }}</div>
-                            <div class="text-sm text-gray-600">總支出</div>
-                        </div>
-                        <div class="text-center p-3 rounded-lg bg-green-50">
-                            <div class="text-xl font-bold" style="color: var(--success-green);">¥ {{ averageDailyExpense }}</div>
-                            <div class="text-sm text-gray-600">日均支出</div>
-                        </div>
-                        <div class="text-center p-3 rounded-lg bg-orange-50">
-                            <div class="text-xl font-bold" style="color: var(--warning-orange);">{{ expenseCount }}</div>
-                            <div class="text-sm text-gray-600">支出筆數</div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-sm text-gray-600">
-                        <i class="fas fa-wallet mr-1"></i> 預算剩餘：<span class="font-bold" style="color: var(--primary-blue);">¥ {{ remainingBudget }}</span>
-                    </div>
-                </div>
-                
-                <!-- 支出明細 (按天分頁) -->
-                <div class="card-blue p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold" style="color: var(--primary-blue);">支出明細</h2>
-                        <div class="flex space-x-2">
+                        
+                        <!-- 支出類別篩選 -->
+                        <div class="flex mb-4 overflow-x-auto pb-2">
                             <button 
-                                v-for="day in expenseDays" 
-                                :key="day.id"
-                                @click="selectedExpenseDay = day.id"
-                                :class="['px-3 py-1 rounded-lg text-sm', selectedExpenseDay === day.id ? 'bg-blue-100 text-blue-700 font-bold' : 'bg-gray-100 text-gray-700']"
+                                v-for="category in expenseCategories" 
+                                :key="category.id"
+                                @click="selectedExpenseCategory = category.id"
+                                :class="['px-4 py-2 rounded-full mr-2 whitespace-nowrap', selectedExpenseCategory === category.id ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700']"
                             >
-                                {{ day.name }}
+                                {{ category.name }}
                             </button>
                         </div>
-                    </div>
-                    
-                    <div v-if="filteredExpenses.length === 0" class="text-center py-8 text-gray-500">
-                        <i class="fas fa-receipt text-4xl mb-3" style="color: #ccc;"></i>
-                        <p>沒有支出紀錄</p>
-                    </div>
-                    
-                    <div v-else class="space-y-3">
-                        <div 
-                            v-for="(expense, index) in filteredExpenses" 
-                            :key="index"
-                            class="p-4 rounded-lg border border-gray-200 hover:border-blue-200 transition-all"
-                        >
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="font-bold">{{ expense.name }}</h3>
-                                    <div class="flex items-center mt-1 text-sm text-gray-600">
-                                        <i :class="getPaymentMethodIcon(expense.paymentMethod)" class="mr-1"></i>
-                                        <span class="mr-3">{{ getPaymentMethodName(expense.paymentMethod) }}</span>
-                                        <span class="px-2 py-1 rounded text-xs" :style="{ backgroundColor: getCategoryColor(expense.category), color: 'white' }">
-                                            {{ getCategoryName(expense.category) }}
-                                        </span>
+                        
+                        <!-- 支出記錄 -->
+                        <div v-if="filteredExpenses.length === 0" class="text-center py-8 text-gray-500">
+                            <i class="fas fa-receipt text-3xl mb-3"></i>
+                            <p>沒有相關的支出紀錄</p>
+                        </div>
+                        
+                        <div v-else class="space-y-4">
+                            <div v-for="(expense, index) in filteredExpenses" :key="index" class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="font-medium text-gray-900">{{ expense.description }}</div>
+                                        <div class="text-sm text-gray-600">{{ expense.category }} • {{ expense.date }}</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-gray-900">¥{{ expense.amount.toLocaleString() }}</div>
+                                        <div class="text-xs text-gray-500">{{ expense.paymentMethod }}</div>
                                     </div>
                                 </div>
-                                <div class="text-right flex items-start">
-                                    <div>
-                                        <div class="text-lg font-bold" style="color: var(--primary-blue);">¥ {{ expense.amount }}</div>
-                                    </div>
-                                    <!-- 刪除按鈕 -->
-                                    <button @click="deleteExpense(expense.id)" class="delete-btn ml-2">
-                                        <i class="fas fa-trash"></i>
+                                <div class="flex justify-end mt-3">
+                                    <button @click="deleteExpense(index)" class="text-red-500 hover:text-red-700 text-sm">
+                                        <i class="fas fa-trash mr-1"></i>刪除
                                     </button>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- 添加支出按鈕 -->
+                        <button @click="showAddExpenseModal = true" class="btn-primary w-full mt-6 py-3">
+                            <i class="fas fa-plus mr-2"></i>記一筆
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- 購物清單頁面 -->
-            <div v-if="activeTab === 'shopping'" class="space-y-6 fade-in">
-                <!-- 新增購物項目 -->
-                <div class="card-blue p-5">
-                    <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">新增購物項目</h2>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-gray-700 mb-1">商品名稱</label>
-                            <input 
-                                type="text" 
-                                v-model="newItem.name" 
-                                placeholder="例如：CEZANNE 101號唇膏" 
-                                class="input-field w-full"
-                            >
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-gray-700 mb-1">預算 (¥)</label>
-                                <input 
-                                    type="number" 
-                                    v-model="newItem.budget" 
-                                    placeholder="預算" 
-                                    class="input-field w-full"
-                                >
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 mb-1">數量</label>
-                                <input 
-                                    type="number" 
-                                    v-model="newItem.quantity" 
-                                    min="1" 
-                                    class="input-field w-full"
-                                >
-                            </div>
-                        </div>
-                        
-                        <!-- 圖片上傳 -->
-                        <div>
-                            <label class="block text-gray-700 mb-1">商品圖片</label>
-                            <div class="flex items-center space-x-4">
-                                <div @click="triggerImageUpload" class="image-preview">
-                                    <div v-if="!newItem.image" class="text-center">
-                                        <i class="fas fa-camera text-2xl mb-1"></i>
-                                        <div class="text-xs">點擊上傳</div>
-                                    </div>
-                                    <img v-else :src="newItem.image" alt="預覽">
-                                </div>
-                                <input 
-                                    type="file" 
-                                    ref="imageInput"
-                                    @change="handleImageUpload"
-                                    accept="image/*"
-                                    class="hidden"
-                                >
-                                <div v-if="newItem.image" class="text-sm text-gray-600">
-                                    圖片已選擇
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" v-model="newItem.important" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                    <span class="ml-2 text-gray-700">重要項目</span>
-                                </label>
-                            </div>
-                            
-                            <button @click="addShoppingItem" class="btn-primary px-4">
-                                <i class="fas fa-plus mr-2"></i> 新增
+            <div v-if="activeTab === 'shopping'" class="space-y-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-bold text-gray-900">購物清單</h2>
+                            <button @click="showAddShoppingItemModal = true" class="btn-primary py-2 px-4 text-sm">
+                                <i class="fas fa-plus mr-1"></i>新增商品
                             </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5">
+                        <div v-if="shoppingList.length === 0" class="text-center py-8 text-gray-500">
+                            <i class="fas fa-shopping-bag text-3xl mb-3"></i>
+                            <p>購物清單是空的</p>
+                        </div>
+                        
+                        <div v-else class="space-y-4">
+                            <div v-for="(item, index) in shoppingList" :key="index" class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-grow">
+                                        <div class="font-bold text-gray-900 text-lg mb-1">{{ item.name }}</div>
+                                        <div class="text-sm text-gray-600 mb-2">{{ item.store }}</div>
+                                        <div class="text-sm text-gray-600 flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-gray-900 text-xl">¥{{ item.price.toLocaleString() }}</div>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            <span v-if="item.purchased" class="text-green-600">
+                                                <i class="fas fa-check mr-1"></i>已購買
+                                            </span>
+                                            <span v-else class="text-orange-500">
+                                                <i class="fas fa-clock mr-1"></i>待購買
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center mt-4">
+                                    <div class="flex items-center">
+                                        <input 
+                                            type="checkbox" 
+                                            v-model="item.purchased"
+                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            id="purchased-checkbox"
+                                        >
+                                        <label for="purchased-checkbox" class="ml-2 text-sm text-gray-700">已購買</label>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button @click="editShoppingItem(index)" class="text-blue-600 hover:text-blue-800">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button @click="deleteShoppingItem(index)" class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 資訊頁面 -->
+            <div v-if="activeTab === 'info'" class="space-y-6">
+                <div class="weather-card">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <div class="text-lg font-bold">東京天氣</div>
+                            <div class="text-3xl font-bold mt-1">{{ currentWeather.temp }}°C</div>
+                            <div class="text-sm mt-1">{{ currentWeather.condition }}</div>
+                        </div>
+                        <i :class="currentWeather.icon" class="text-5xl"></i>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <div class="text-center">
+                            <div class="text-sm">濕度</div>
+                            <div class="font-bold">{{ currentWeather.humidity }}%</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm">風速</div>
+                            <div class="font-bold">{{ currentWeather.windSpeed }} km/h</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm">體感</div>
+                            <div class="font-bold">{{ currentWeather.feelsLike }}°C</div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 購物清單 -->
-                <div class="card-blue p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold" style="color: var(--primary-blue);">購物清單</h2>
-                        <div class="text-sm text-gray-600">
-                            {{ completedItems }} / {{ shoppingList.length }} 已完成
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-lg font-bold text-gray-900">旅行資訊</h2>
                     </div>
                     
-                    <div v-if="shoppingList.length === 0" class="text-center py-8 text-gray-500">
-                        <i class="fas fa-shopping-cart text-4xl mb-3" style="color: #ccc;"></i>
-                        <p>購物清單是空的</p>
-                    </div>
-                    
-                    <div v-else class="space-y-3">
-                        <div 
-                            v-for="(item, index) in shoppingList" 
-                            :key="index"
-                            class="p-4 rounded-lg border border-gray-200 hover:border-blue-200 transition-all"
-                        >
-                            <div class="flex items-start">
-                                <!-- 圖片 -->
-                                <div class="mr-3">
-                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                                        <img v-if="item.image" :src="item.image" alt="商品圖片" class="w-full h-full object-cover">
-                                        <i v-else class="fas fa-shopping-bag text-gray-400 text-xl"></i>
-                                    </div>
+                    <div class="p-5">
+                        <!-- 匯率資訊 -->
+                        <div class="mb-6">
+                            <h3 class="font-bold text-gray-900 mb-3">匯率（今日）</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 border border-gray-200 rounded-lg text-center">
+                                    <div class="text-sm text-gray-600">港幣 HKD</div>
+                                    <div class="font-bold text-gray-900">1 HKD ≈ {{ exchangeRates.hkd }} JPY</div>
                                 </div>
-                                
-                                <div class="flex-grow">
-                                    <div class="flex justify-between">
-                                        <h3 :class="['font-medium', item.completed ? 'line-through text-gray-500' : '']">
-                                            {{ item.name }}
-                                            <span v-if="item.important" class="ml-2 text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">重要</span>
-                                        </h3>
-                                        <!-- 刪除按鈕 -->
-                                        <button @click="deleteShoppingItem(index)" class="delete-btn ml-2">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-between mt-2">
-                                        <div class="text-sm text-gray-600">
-                                            <i class="fas fa-yen-sign mr-1"></i> 預算：¥{{ item.budget }}
-                                            <span class="mx-2">•</span>
-                                            <i class="fas fa-sort-amount-up mr-1"></i> 數量：{{ item.quantity }}
-                                        </div>
-                                        
-                                        <button 
-                                            @click="toggleComplete(index)"
-                                            :class="['w-6 h-6 rounded-full border-2 flex items-center justify-center', item.completed ? 'bg-green-500 border-green-500' : 'border-gray-300']"
-                                        >
-                                            <i v-if="item.completed" class="fas fa-check text-white text-xs"></i>
-                                        </button>
-                                    </div>
+                                <div class="p-3 border border-gray-200 rounded-lg text-center">
+                                    <div class="text-sm text-gray-600">新台幣 TWD</div>
+                                    <div class="font-bold text-gray-900">1 TWD ≈ {{ exchangeRates.twd }} JPY</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="divider-japan"></div>
-                    
-                    <!-- 購物預算統計 -->
-                    <div class="mt-4">
-                        <h3 class="font-bold mb-2" style="color: var(--primary-blue);">購物預算統計</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="text-center p-3 rounded-lg bg-blue-50">
-                                <div class="text-lg font-bold" style="color: var(--primary-blue);">¥ {{ totalShoppingBudget }}</div>
-                                <div class="text-sm text-gray-600">總預算</div>
-                            </div>
-                            <div class="text-center p-3 rounded-lg bg-green-50">
-                                <div class="text-lg font-bold" style="color: var(--success-green);">¥ {{ remainingShoppingBudget }}</div>
-                                <div class="text-sm text-gray-600">剩餘預算</div>
+                        
+                        <!-- 實用資訊 -->
+                        <div>
+                            <h3 class="font-bold text-gray-900 mb-3">實用資訊</h3>
+                            <div class="space-y-3">
+                                <div class="p-3 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-train text-blue-600 text-lg mr-3"></i>
+                                        <div class="font-medium text-gray-900">東京地鐵</div>
+                                    </div>
+                                    <div class="text-sm text-gray-600 mt-1">地鐵24/48/72小時通票可在指定時間內無限次乘坐。</div>
+                                </div>
+                                <div class="p-3 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-wifi text-blue-600 text-lg mr-3"></i>
+                                        <div class="font-medium text-gray-900">免費Wi-Fi</div>
+                                    </div>
+                                    <div class="text-sm text-gray-600 mt-1">東京設有「Japan Free Wi-Fi」熱點，需註冊使用。</div>
+                                </div>
+                                <div class="p-3 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-shopping-cart text-blue-600 text-lg mr-3"></i>
+                                        <div class="font-medium text-gray-900">免稅購物</div>
+                                    </div>
+                                    <div class="text-sm text-gray-600 mt-1">購物滿5,000日圓（不含稅）可辦理免稅手續。</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -839,47 +675,225 @@
             </div>
         </main>
 
-        <!-- 底部導航欄 -->
-        <nav class="nav-bottom fixed bottom-0 left-0 right-0 py-3 px-6 flex justify-around z-10">
-            <button 
-                v-for="tab in tabs" 
-                :key="tab.id"
-                @click="activeTab = tab.id"
-                :class="['flex flex-col items-center py-1', activeTab === tab.id ? 'text-blue-600 font-bold' : 'text-gray-500']"
-            >
-                <i :class="[tab.icon, 'text-xl mb-1']"></i>
-                <span class="text-xs">{{ tab.name }}</span>
-            </button>
+        <!-- 底部導航 -->
+        <nav class="nav-bottom fixed bottom-0 left-0 right-0 max-w-480 mx-auto">
+            <div class="flex justify-around">
+                <div 
+                    v-for="tab in tabs" 
+                    :key="tab.id"
+                    @click="activeTab = tab.id"
+                    :class="['nav-item flex flex-col items-center cursor-pointer', activeTab === tab.id ? 'active' : '']"
+                >
+                    <i :class="[tab.icon, 'nav-icon']"></i>
+                    <span>{{ tab.name }}</span>
+                </div>
+            </div>
         </nav>
 
         <!-- 新增行前清單項目模態框 -->
-        <div v-if="showAddChecklist" class="fixed inset-0 bg-black/50 flex items-center justify-center z-20 p-4">
-            <div class="card-blue w-full max-w-md p-5">
-                <h2 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">新增行前準備事項</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 mb-1">事項名稱</label>
-                        <input type="text" v-model="newChecklistItem.name" placeholder="輸入準備事項" class="input-field w-full">
+        <div v-if="showAddChecklistModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">新增行前項目</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">項目名稱</label>
+                        <input 
+                            type="text" 
+                            v-model="newChecklistItem.name" 
+                            placeholder="例如：購買旅遊保險" 
+                            class="input-field"
+                        >
                     </div>
                     
-                    <div>
-                        <label class="block text-gray-700 mb-1">優先級</label>
-                        <select v-model="newChecklistItem.priority" class="input-field w-full">
-                            <option value="high">重要</option>
-                            <option value="medium">中等</option>
-                            <option value="low">一般</option>
-                        </select>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">優先級</label>
+                        <div class="flex space-x-3">
+                            <button 
+                                v-for="priority in priorityOptions" 
+                                :key="priority.id"
+                                @click="newChecklistItem.priority = priority.id"
+                                :class="['px-4 py-2 rounded-lg', newChecklistItem.priority === priority.id ? priority.class : 'bg-gray-200 text-gray-700']"
+                            >
+                                {{ priority.name }}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button @click="showAddChecklistModal = false" class="btn-outline flex-grow">取消</button>
+                        <button @click="addChecklistItem" class="btn-primary flex-grow">新增</button>
                     </div>
                 </div>
-                
-                <div class="flex justify-end mt-6 space-x-3">
-                    <button @click="showAddChecklist = false" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700">
-                        取消
-                    </button>
-                    <button @click="addChecklistItem" class="btn-primary px-4 py-2">
-                        新增事項
-                    </button>
+            </div>
+        </div>
+
+        <!-- 新增行程項目模態框 -->
+        <div v-if="showAddScheduleItemModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">{{ editingScheduleItem ? '編輯行程項目' : '新增行程項目' }}</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">選擇日期</label>
+                        <select v-model="newScheduleItem.day" class="input-field">
+                            <option v-for="day in tripDays" :value="day.id">{{ day.date }} {{ day.day }} - {{ day.area }}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">時間</label>
+                        <input 
+                            type="text" 
+                            v-model="newScheduleItem.time" 
+                            placeholder="例如：09:00" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">活動名稱</label>
+                        <input 
+                            type="text" 
+                            v-model="newScheduleItem.title" 
+                            placeholder="例如：參觀淺草寺" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">地點</label>
+                        <input 
+                            type="text" 
+                            v-model="newScheduleItem.location" 
+                            placeholder="例如：淺草寺" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">備註（可選）</label>
+                        <textarea 
+                            v-model="newScheduleItem.note" 
+                            placeholder="例如：記得購買御守" 
+                            class="input-field"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button @click="closeScheduleModal" class="btn-outline flex-grow">取消</button>
+                        <button @click="saveScheduleItem" class="btn-primary flex-grow">{{ editingScheduleItem ? '更新' : '新增' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增支出模態框 -->
+        <div v-if="showAddExpenseModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">新增支出</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">描述</label>
+                        <input 
+                            type="text" 
+                            v-model="newExpense.description" 
+                            placeholder="例如：午餐 - 壽司" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">金額（日圓）</label>
+                        <input 
+                            type="number" 
+                            v-model="newExpense.amount" 
+                            placeholder="例如：2500" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">類別</label>
+                        <select v-model="newExpense.category" class="input-field">
+                            <option v-for="category in expenseCategories" :value="category.id">{{ category.name }}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">支付方式</label>
+                        <div class="flex space-x-3">
+                            <button 
+                                v-for="method in paymentMethods" 
+                                :key="method.id"
+                                @click="newExpense.paymentMethod = method.id"
+                                :class="['px-4 py-2 rounded-lg', newExpense.paymentMethod === method.id ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700']"
+                            >
+                                {{ method.name }}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button @click="showAddExpenseModal = false" class="btn-outline flex-grow">取消</button>
+                        <button @click="addExpense" class="btn-primary flex-grow">新增</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增購物項目模態框 -->
+        <div v-if="showAddShoppingItemModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">{{ editingShoppingItemIndex !== null ? '編輯購物項目' : '新增購物項目' }}</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">商品名稱</label>
+                        <input 
+                            type="text" 
+                            v-model="newShoppingItem.name" 
+                            placeholder="例如：CEZANNE 101號唇膏" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">價格（日圓）</label>
+                        <input 
+                            type="number" 
+                            v-model="newShoppingItem.price" 
+                            placeholder="例如：3000" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">商店</label>
+                        <input 
+                            type="text" 
+                            v-model="newShoppingItem.store" 
+                            placeholder="例如：松本清藥妝店" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">地點</label>
+                        <input 
+                            type="text" 
+                            v-model="newShoppingItem.location" 
+                            placeholder="例如：澀谷店" 
+                            class="input-field"
+                        >
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button @click="closeShoppingModal" class="btn-outline flex-grow">取消</button>
+                        <button @click="saveShoppingItem" class="btn-primary flex-grow">{{ editingShoppingItemIndex !== null ? '更新' : '新增' }}</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -890,254 +904,209 @@
         
         createApp({
             setup() {
-                // 當前選中的選項卡
+                // 活動頁面
                 const activeTab = ref('schedule');
                 
-                // 選項卡數據
+                // 底部導航標籤
                 const tabs = [
-                    { id: 'schedule', name: '行程', icon: 'fas fa-calendar-alt' },
+                    { id: 'schedule', name: '行程', icon: 'fas fa-calendar-day' },
                     { id: 'map', name: '地圖', icon: 'fas fa-map' },
-                    { id: 'accounting', name: '記帳', icon: 'fas fa-yen-sign' },
-                    { id: 'shopping', name: '購物', icon: 'fas fa-shopping-cart' }
+                    { id: 'budget', name: '記帳', icon: 'fas fa-receipt' },
+                    { id: 'shopping', name: '購物', icon: 'fas fa-shopping-bag' },
+                    { id: 'info', name: '資訊', icon: 'fas fa-info-circle' }
                 ];
                 
-                // 行前清單相關數據
+                // 行前清單
                 const preTripChecklist = ref([
                     { name: '購買旅遊保險', completed: false, priority: 'high' },
-                    { name: '買網卡/租WiFi', completed: false, priority: 'high' },
-                    { name: '換日幣', completed: true, priority: 'high' },
-                    { name: '預訂住宿', completed: true, priority: 'medium' },
-                    { name: '購買機票', completed: true, priority: 'high' },
-                    { name: '準備轉接頭', completed: false, priority: 'medium' },
-                    { name: '下載離線地圖', completed: false, priority: 'medium' },
-                    { name: '學習基本日語', completed: false, priority: 'low' },
-                    { name: '打印行程資料', completed: false, priority: 'low' },
-                    { name: '準備演唱會門票', completed: true, priority: 'high' }
+                    { name: '買網卡', completed: false, priority: 'high' },
+                    { name: '兌換日圓', completed: true, priority: 'medium' },
+                    { name: '確認航班資訊', completed: true, priority: 'medium' },
+                    { name: '下載旅行App', completed: true, priority: 'low' },
+                    { name: '預訂住宿', completed: true, priority: 'high' }
                 ]);
-                const showAddChecklist = ref(false);
+                
+                // 優先級選項
+                const priorityOptions = [
+                    { id: 'high', name: '重要', class: 'bg-red-100 text-red-700' },
+                    { id: 'medium', name: '中等', class: 'bg-yellow-100 text-yellow-700' },
+                    { id: 'low', name: '一般', class: 'bg-green-100 text-green-700' }
+                ];
+                
+                // 新增行前清單項目
+                const showAddChecklistModal = ref(false);
                 const newChecklistItem = ref({
                     name: '',
-                    priority: 'medium'
+                    priority: 'high'
                 });
                 
-                // 4日行程相關數據
-                const tripDays = ref([
-                    { id: 1, date: '11/16', day: 'Day 1', area: '池袋' },
-                    { id: 2, date: '11/17', day: 'Day 2', area: '橫濱' },
-                    { id: 3, date: '11/18', day: 'Day 3', area: '新宿' },
-                    { id: 4, date: '11/19', day: 'Day 4', area: '澀谷' }
-                ]);
+                // 4日行程安排
+                const tripDays = [
+                    { id: 1, date: '11/16', day: '週六', area: '池袋' },
+                    { id: 2, date: '11/17', day: '週日', area: '新宿' },
+                    { id: 3, date: '11/18', day: '週一', area: '澀谷' },
+                    { id: 4, date: '11/19', day: '週二', area: '橫濱' }
+                ];
+                
                 const selectedDay = ref(1);
+                
+                // 行程項目數據
                 const scheduleData = ref({
                     1: {
-                        weather: { temp: '12', condition: '晴天', icon: 'fas fa-sun', updateTime: '08:30' },
                         items: [
-                            { time: '15:55', title: '抵達成田機場', location: '成田國際機場', note: '領取行李、購買Suica卡' },
-                            { time: '17:30', title: '機場快線到池袋', location: '成田空港駅 → 池袋駅', note: 'NEX成田特快，約1.5小時' },
-                            { time: '19:30', title: 'Check-in 酒店', location: '池袋太陽城王子酒店', note: '' },
-                            { time: '20:00', title: '晚餐 - 無敵家拉麵', location: '池袋店', note: '池袋著名拉麵店' },
-                            { time: '21:30', title: '池袋夜景散步', location: 'Sunshine City', note: '欣賞池袋夜景' }
+                            { time: '08:00', title: '早餐', location: '飯店', note: '' },
+                            { time: '10:00', title: '池袋太陽城', location: '池袋', note: '購物中心' },
+                            { time: '12:30', title: '午餐 - 拉麵', location: '無敵家拉麵', note: '池袋人氣拉麵店' },
+                            { time: '14:00', title: '池袋逛街', location: '池袋東口商店街', note: '動漫商品' },
+                            { time: '19:00', title: '晚餐', location: '居酒屋', note: '' }
                         ]
                     },
                     2: {
-                        weather: { temp: '14', condition: '多雲', icon: 'fas fa-cloud', updateTime: '09:15' },
                         items: [
-                            { time: '10:00', title: '前往橫濱', location: '池袋駅 → 橫濱駅', note: 'JR埼京線直通，約45分鐘' },
-                            { time: '11:00', title: '橫濱紅磚倉庫', location: '橫濱紅磚倉庫', note: '拍照、購物、午餐' },
-                            { time: '14:00', title: '橫濱中華街', location: '橫濱中華街', note: '探索日本最大中華街' },
-                            { time: '16:00', title: 'Cosmo World 遊樂園', location: '橫濱Cosmo World', note: '著名摩天輪夜景' },
-                            { time: '19:30', title: '橫濱演唱會', location: '橫濱體育館', note: '演唱會時間' },
-                            { time: '22:00', title: '返回池袋', location: '橫濱駅 → 池袋駅', note: 'JR埼京線' }
+                            { time: '09:00', title: '新宿御苑', location: '新宿', note: '日式庭園' },
+                            { time: '12:00', title: '午餐', location: '新宿黃金街', note: '' },
+                            { time: '14:00', title: '逛街', location: '新宿伊勢丹', note: '百貨公司' }
                         ]
                     },
                     3: {
-                        weather: { temp: '13', condition: '陰天', icon: 'fas fa-cloud-sun', updateTime: '08:45' },
                         items: [
-                            { time: '09:30', title: '前往新宿', location: '池袋駅 → 新宿駅', note: 'JR山手線，約10分鐘' },
-                            { time: '10:00', title: '新宿御苑', location: '新宿御苑', note: '日式庭園散步' },
-                            { time: '12:00', title: '午餐 - 蟹道樂', location: '新宿店', note: '著名螃蟹料理' },
-                            { time: '14:00', title: '新宿逛街', location: '新宿東口商店街', note: '藥妝店、百貨公司' },
-                            { time: '16:30', title: '東京都廳展望台', location: '新宿西口', note: '免費欣賞東京全景' },
-                            { time: '19:00', title: '晚餐 - 歌舞伎町', location: '新宿歌舞伎町', note: '體驗東京夜生活' }
+                            { time: '10:00', title: '澀谷十字路口', location: '澀谷', note: '世界最繁忙十字路口' },
+                            { time: '11:00', title: '忠犬八公像', location: '澀谷站前', note: '拍照留念' },
+                            { time: '13:00', title: '午餐', location: '澀谷美食街', note: '' }
                         ]
                     },
                     4: {
-                        weather: { temp: '11', condition: '小雨', icon: 'fas fa-cloud-rain', updateTime: '09:00' },
                         items: [
-                            { time: '10:00', title: '前往澀谷', location: '池袋駅 → 澀谷駅', note: 'JR山手線，約15分鐘' },
-                            { time: '10:30', title: '忠犬八公像', location: '澀谷駅前', note: '拍照留念' },
-                            { time: '11:00', title: '澀谷十字路口', location: '澀谷スクランブル交差点', note: '體驗世界最繁忙路口' },
-                            { time: '12:30', title: '午餐 - 迴轉壽司', location: '澀谷店', note: '新鮮壽司體驗' },
-                            { time: '14:00', title: '原宿竹下通', location: '原宿竹下通', note: '潮流購物街道' },
-                            { time: '16:00', title: '表參道', location: '表參道', note: '名牌購物街' },
-                            { time: '18:00', title: '晚餐 - 澀谷居酒屋', location: '澀谷道玄坂', note: '最後一晚慶祝' },
-                            { time: '20:30', title: '前往羽田機場', location: '澀谷駅 → 羽田機場', note: '機場巴士，約1小時' },
-                            { time: '23:55', title: '回程航班', location: '羽田國際機場', note: '航班U0623，04:15抵達香港' }
+                            { time: '09:00', title: '前往橫濱', location: '新宿駅', note: '乘坐JR湘南新宿線' },
+                            { time: '10:30', title: '橫濱中華街', location: '橫濱', note: '日本最大中華街' },
+                            { time: '12:30', title: '午餐', location: '橫濱中華街', note: '' },
+                            { time: '14:00', title: '橫濱紅磚倉庫', location: '橫濱港', note: '購物與歷史建築' },
+                            { time: '16:00', title: '前往羽田機場', location: '橫濱駅', note: '乘坐京急線' },
+                            { time: '21:00', title: '辦理登機手續', location: '羽田機場', note: '航班U0623' }
                         ]
                     }
                 });
                 
-                // 地圖相關數據
+                // 新增行程項目
+                const showAddScheduleItemModal = ref(false);
+                const editingScheduleItem = ref(false);
+                const newScheduleItem = ref({
+                    day: 1,
+                    time: '',
+                    title: '',
+                    location: '',
+                    note: ''
+                });
+                
+                // 地圖相關
                 const searchLocation = ref('');
                 const startLocation = ref('池袋駅');
                 const endLocation = ref('新宿駅');
-                const mainAreas = ref([
-                    { id: 1, name: '池袋', description: '購物、美食', icon: '🛍️' },
-                    { id: 2, name: '新宿', description: '商業、娛樂', icon: '🏢' },
-                    { id: 3, name: '澀谷', description: '潮流、青年', icon: '🚶' },
-                    { id: 4, name: '橫濱', description: '港口、演唱會', icon: '🎤' },
-                    { id: 5, name: '原宿', description: '潮流、文化', icon: '👘' },
-                    { id: 6, name: '表參道', description: '名牌、設計', icon: '💎' }
-                ]);
-                const transportRoutes = ref([
-                    { name: 'JR山手線', from: '池袋', to: '新宿', time: '10分', cost: '¥160', icon: 'fas fa-train', color: '#008000' },
-                    { name: 'JR埼京線', from: '池袋', to: '橫濱', time: '45分', cost: '¥580', icon: 'fas fa-train', color: '#1e50a2' },
-                    { name: '東京Metro', from: '池袋', to: '澀谷', time: '15分', cost: '¥200', icon: 'fas fa-subway', color: '#F15A22' }
-                ]);
                 
-                // 記帳相關數據
-                const paymentMethods = ref([
-                    { id: 'cash', name: '現金', icon: 'fas fa-money-bill-wave', color: '#4caf50' },
-                    { id: 'credit', name: '信用卡', icon: 'fas fa-credit-card', color: '#2196f3' },
-                    { id: 'ic', name: 'IC卡', icon: 'fas fa-train', color: '#ff9800' },
-                    { id: 'alipay', name: 'Alipay', icon: 'fas fa-mobile-alt', color: '#009688' }
-                ]);
-                const newExpense = ref({
-                    name: '',
-                    amount: '',
-                    paymentMethod: 'cash',
-                    day: 'day1',
-                    category: 'food'
-                });
-                
-                // 支出數據（包含唯一ID以便刪除）
+                // 記帳相關
+                const budget = ref(150000);
                 const expenses = ref([
-                    { id: 1, name: '機場Suica卡儲值', amount: 5000, paymentMethod: 'cash', day: 'day1', category: 'transportation' },
-                    { id: 2, name: '無敵家拉麵', amount: 1200, paymentMethod: 'cash', day: 'day1', category: 'food' },
-                    { id: 3, name: '池袋酒店住宿', amount: 15000, paymentMethod: 'credit', day: 'day1', category: 'accommodation' },
-                    { id: 4, name: '前往橫濱車票', amount: 580, paymentMethod: 'ic', day: 'day2', category: 'transportation' },
-                    { id: 5, name: '橫濱紅磚倉庫午餐', amount: 1800, paymentMethod: 'alipay', day: 'day2', category: 'food' },
-                    { id: 6, name: '演唱會周邊商品', amount: 3500, paymentMethod: 'cash', day: 'day2', category: 'merchandise' },
-                    { id: 7, name: '新宿蟹道樂午餐', amount: 4500, paymentMethod: 'credit', day: 'day3', category: 'food' },
-                    { id: 8, name: '藥妝店購物', amount: 8500, paymentMethod: 'alipay', day: 'day3', category: 'shopping' }
+                    { description: '機場午餐', amount: 1200, category: 'food', paymentMethod: 'cash', date: '11/16' },
+                    { description: '地鐵一日券', amount: 800, category: 'transport', paymentMethod: 'cash', date: '11/16' },
+                    { description: '藥妝購物', amount: 4500, category: 'shopping', paymentMethod: 'credit', date: '11/16' },
+                    { description: '晚餐居酒屋', amount: 3200, category: 'food', paymentMethod: 'credit', date: '11/16' },
+                    { description: '池袋太陽城門票', amount: 1000, category: 'entertainment', paymentMethod: 'cash', date: '11/16' }
                 ]);
                 
-                const expenseDays = ref([
+                const expenseCategories = [
                     { id: 'all', name: '全部' },
-                    { id: 'day1', name: 'Day 1' },
-                    { id: 'day2', name: 'Day 2' },
-                    { id: 'day3', name: 'Day 3' },
-                    { id: 'day4', name: 'Day 4' }
-                ]);
-                const selectedExpenseDay = ref('all');
-                const travelBudget = ref(80000);
+                    { id: 'food', name: '餐飲' },
+                    { id: 'transport', name: '交通' },
+                    { id: 'shopping', name: '購物' },
+                    { id: 'entertainment', name: '娛樂' },
+                    { id: 'accommodation', name: '住宿' },
+                    { id: 'other', name: '其他' }
+                ];
                 
-                // 購物清單相關數據
-                const newItem = ref({
-                    name: '',
-                    important: false,
-                    budget: '',
-                    quantity: 1,
-                    image: null
+                const selectedExpenseCategory = ref('all');
+                
+                const paymentMethods = [
+                    { id: 'cash', name: '現金' },
+                    { id: 'credit', name: '信用卡' },
+                    { id: 'debit', name: '扣賬卡' }
+                ];
+                
+                // 新增支出
+                const showAddExpenseModal = ref(false);
+                const newExpense = ref({
+                    description: '',
+                    amount: null,
+                    category: 'food',
+                    paymentMethod: 'cash',
+                    date: ''
                 });
+                
+                // 購物清單
                 const shoppingList = ref([
-                    { 
-                        name: 'CEZANNE 101號唇膏', 
-                        completed: false, 
-                        important: true, 
-                        budget: 3000, 
-                        quantity: 2,
-                        image: null
-                    },
-                    { 
-                        name: '白色戀人巧克力', 
-                        completed: true, 
-                        important: false, 
-                        budget: 1500, 
-                        quantity: 3,
-                        image: null
-                    },
-                    { 
-                        name: '東京香蕉蛋糕', 
-                        completed: false, 
-                        important: true, 
-                        budget: 1200, 
-                        quantity: 2,
-                        image: null
-                    },
-                    { 
-                        name: '藥妝店面膜', 
-                        completed: false, 
-                        important: false, 
-                        budget: 2000, 
-                        quantity: 5,
-                        image: null
-                    }
+                    { name: 'CEZANNE 101號唇膏', price: 3000, store: '松本清藥妝店', location: '澀谷店', purchased: false },
+                    { name: 'SK-II 護膚精華', price: 12000, store: '伊勢丹百貨', location: '新宿店', purchased: true },
+                    { name: '白色戀人巧克力', price: 1500, store: '機場免稅店', location: '成田機場', purchased: false },
+                    { name: '日本抹茶粉', price: 800, store: '淺草商店街', location: '淺草', purchased: false }
                 ]);
-                const imageInput = ref(null);
+                
+                // 新增購物項目
+                const showAddShoppingItemModal = ref(false);
+                const editingShoppingItemIndex = ref(null);
+                const newShoppingItem = ref({
+                    name: '',
+                    price: null,
+                    store: '',
+                    location: ''
+                });
+                
+                // 天氣資訊
+                const currentWeather = ref({
+                    temp: 12,
+                    condition: '多雲',
+                    humidity: 65,
+                    windSpeed: 8,
+                    feelsLike: 10,
+                    icon: 'fas fa-cloud'
+                });
+                
+                // 匯率資訊
+                const exchangeRates = ref({
+                    hkd: 18.5,
+                    twd: 4.3
+                });
                 
                 // 計算屬性
                 const selectedDaySchedule = computed(() => {
                     return scheduleData.value[selectedDay.value];
                 });
                 
-                const selectedDayWeather = computed(() => {
-                    return scheduleData.value[selectedDay.value]?.weather || { temp: '12', condition: '晴天', icon: 'fas fa-sun', updateTime: '08:30' };
+                const filteredExpenses = computed(() => {
+                    if (selectedExpenseCategory.value === 'all') {
+                        return expenses.value;
+                    }
+                    return expenses.value.filter(expense => expense.category === selectedExpenseCategory.value);
                 });
                 
                 const totalExpenses = computed(() => {
-                    return expenses.value.reduce((sum, expense) => sum + Number(expense.amount), 0);
-                });
-                
-                const averageDailyExpense = computed(() => {
-                    const expenseDays = [...new Set(expenses.value.map(e => e.day))].length;
-                    return expenseDays > 0 ? Math.round(totalExpenses.value / expenseDays) : 0;
-                });
-                
-                const expenseCount = computed(() => {
-                    return expenses.value.length;
+                    return expenses.value.reduce((total, expense) => total + expense.amount, 0);
                 });
                 
                 const remainingBudget = computed(() => {
-                    return travelBudget.value - totalExpenses.value;
+                    return budget.value - totalExpenses.value;
                 });
                 
-                const filteredExpenses = computed(() => {
-                    if (selectedExpenseDay.value === 'all') return expenses.value;
-                    return expenses.value.filter(expense => expense.day === selectedExpenseDay.value);
-                });
-                
-                const completedItems = computed(() => {
-                    return shoppingList.value.filter(item => item.completed).length;
-                });
-                
-                const totalShoppingBudget = computed(() => {
-                    return shoppingList.value.reduce((sum, item) => sum + (Number(item.budget) || 0) * item.quantity, 0);
-                });
-                
-                const remainingShoppingBudget = computed(() => {
-                    const spent = shoppingList.value
-                        .filter(item => item.completed)
-                        .reduce((sum, item) => sum + (Number(item.budget) || 0) * item.quantity, 0);
-                    return totalShoppingBudget.value - spent;
+                const budgetUsedPercentage = computed(() => {
+                    if (budget.value <= 0) return 0;
+                    return Math.min(100, Math.round((totalExpenses.value / budget.value) * 100));
                 });
                 
                 // 方法
-                const getPriorityClass = (priority) => {
-                    switch(priority) {
-                        case 'high': return 'priority-high';
-                        case 'medium': return 'priority-medium';
-                        case 'low': return 'priority-low';
-                        default: return 'priority-medium';
-                    }
-                };
-                
                 const getPriorityText = (priority) => {
                     switch(priority) {
                         case 'high': return '重要';
                         case 'medium': return '中等';
                         case 'low': return '一般';
-                        default: return '中等';
+                        default: return '';
                     }
                 };
                 
@@ -1150,35 +1119,23 @@
                         priority: newChecklistItem.value.priority
                     });
                     
-                    // 重置表單
-                    newChecklistItem.value = {
-                        name: '',
-                        priority: 'medium'
-                    };
+                    newChecklistItem.value.name = '';
+                    newChecklistItem.value.priority = 'high';
+                    showAddChecklistModal.value = false;
                     
-                    showAddChecklist.value = false;
+                    saveToLocalStorage();
                 };
                 
                 const deleteChecklistItem = (index) => {
-                    if (confirm('確定要刪除此項目嗎？')) {
-                        preTripChecklist.value.splice(index, 1);
-                    }
+                    preTripChecklist.value.splice(index, 1);
+                    saveToLocalStorage();
                 };
                 
-                const fetchWeather = () => {
-                    // 模擬天氣API請求
-                    const weatherConditions = ['晴天', '多雲', '陰天', '小雨', '多雲時晴'];
-                    const icons = ['fas fa-sun', 'fas fa-cloud', 'fas fa-cloud-sun', 'fas fa-cloud-rain', 'fas fa-cloud-sun'];
-                    
-                    const randomIndex = Math.floor(Math.random() * weatherConditions.length);
-                    const temp = Math.floor(Math.random() * 5) + 10; // 10-15度
-                    
-                    scheduleData.value[selectedDay.value].weather = {
-                        temp: temp,
-                        condition: weatherConditions[randomIndex],
-                        icon: icons[randomIndex],
-                        updateTime: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
-                    };
+                const openGoogleMaps = () => {
+                    const start = startLocation.value || '東京';
+                    const end = endLocation.value || '東京';
+                    const url = `https://www.google.com/maps/dir/${encodeURIComponent(start)}/${encodeURIComponent(end)}`;
+                    window.open(url, '_blank');
                 };
                 
                 const showNavigation = (location) => {
@@ -1186,210 +1143,284 @@
                     window.open(url, '_blank');
                 };
                 
-                const openGoogleMaps = () => {
-                    const start = startLocation.value || '池袋駅';
-                    const end = endLocation.value || '新宿駅';
-                    const url = `https://www.google.com/maps/dir/${encodeURIComponent(start)}/${encodeURIComponent(end)}`;
-                    window.open(url, '_blank');
+                // 行程項目編輯方法
+                const saveScheduleItem = () => {
+                    if (!newScheduleItem.value.time || !newScheduleItem.value.title || !newScheduleItem.value.location) {
+                        alert('請填寫時間、活動名稱和地點');
+                        return;
+                    }
+                    
+                    const day = newScheduleItem.value.day;
+                    
+                    if (editingScheduleItem.value) {
+                        // 更新現有項目
+                        const index = scheduleData.value[day].items.findIndex(item => 
+                            item.time === newScheduleItem.value.originalTime && 
+                            item.title === newScheduleItem.value.originalTitle
+                        );
+                        
+                        if (index !== -1) {
+                            scheduleData.value[day].items[index] = {
+                                time: newScheduleItem.value.time,
+                                title: newScheduleItem.value.title,
+                                location: newScheduleItem.value.location,
+                                note: newScheduleItem.value.note
+                            };
+                        }
+                    } else {
+                        // 新增項目
+                        if (!scheduleData.value[day]) {
+                            scheduleData.value[day] = { items: [] };
+                        }
+                        
+                        scheduleData.value[day].items.push({
+                            time: newScheduleItem.value.time,
+                            title: newScheduleItem.value.title,
+                            location: newScheduleItem.value.location,
+                            note: newScheduleItem.value.note
+                        });
+                        
+                        // 按時間排序
+                        scheduleData.value[day].items.sort((a, b) => {
+                            return a.time.localeCompare(b.time);
+                        });
+                    }
+                    
+                    closeScheduleModal();
+                    saveToLocalStorage();
                 };
                 
-                const setNavigationArea = (area) => {
-                    endLocation.value = area;
+                const editScheduleItem = (day, index) => {
+                    const item = scheduleData.value[day].items[index];
+                    newScheduleItem.value = {
+                        day: day,
+                        time: item.time,
+                        title: item.title,
+                        location: item.location,
+                        note: item.note,
+                        originalTime: item.time,
+                        originalTitle: item.title
+                    };
+                    editingScheduleItem.value = true;
+                    showAddScheduleItemModal.value = true;
+                };
+                
+                const deleteScheduleItem = (day, index) => {
+                    if (confirm('確定要刪除這個行程項目嗎？')) {
+                        scheduleData.value[day].items.splice(index, 1);
+                        saveToLocalStorage();
+                    }
+                };
+                
+                const closeScheduleModal = () => {
+                    showAddScheduleItemModal.value = false;
+                    editingScheduleItem.value = false;
+                    newScheduleItem.value = {
+                        day: selectedDay.value,
+                        time: '',
+                        title: '',
+                        location: '',
+                        note: ''
+                    };
+                };
+                
+                // 支出管理方法
+                const saveBudget = () => {
+                    if (budget.value < 0) {
+                        budget.value = 0;
+                    }
+                    saveToLocalStorage();
                 };
                 
                 const addExpense = () => {
-                    if (!newExpense.value.name.trim() || !newExpense.value.amount) return;
+                    if (!newExpense.value.description || !newExpense.value.amount) {
+                        alert('請填寫描述和金額');
+                        return;
+                    }
                     
-                    // 生成唯一ID
-                    const expenseId = expenses.value.length > 0 
-                        ? Math.max(...expenses.value.map(e => e.id)) + 1 
-                        : 1;
+                    const today = new Date();
+                    const dateStr = `${today.getMonth()+1}/${today.getDate()}`;
                     
                     expenses.value.push({
-                        id: expenseId,
-                        name: newExpense.value.name,
-                        amount: Number(newExpense.value.amount),
+                        description: newExpense.value.description,
+                        amount: parseInt(newExpense.value.amount),
+                        category: newExpense.value.category,
                         paymentMethod: newExpense.value.paymentMethod,
-                        day: newExpense.value.day,
-                        category: newExpense.value.category
+                        date: dateStr
                     });
                     
-                    // 重置表單
                     newExpense.value = {
-                        name: '',
-                        amount: '',
+                        description: '',
+                        amount: null,
+                        category: 'food',
                         paymentMethod: 'cash',
-                        day: 'day1',
-                        category: 'food'
+                        date: ''
                     };
+                    
+                    showAddExpenseModal.value = false;
+                    saveToLocalStorage();
                 };
                 
-                const deleteExpense = (id) => {
-                    if (confirm('確定要刪除此支出紀錄嗎？')) {
-                        const index = expenses.value.findIndex(expense => expense.id === id);
-                        if (index !== -1) {
-                            expenses.value.splice(index, 1);
-                        }
+                const deleteExpense = (index) => {
+                    if (confirm('確定要刪除這筆支出嗎？')) {
+                        expenses.value.splice(index, 1);
+                        saveToLocalStorage();
                     }
                 };
                 
-                const getPaymentMethodIcon = (methodId) => {
-                    const method = paymentMethods.value.find(m => m.id === methodId);
-                    return method ? method.icon : 'fas fa-question-circle';
-                };
-                
-                const getPaymentMethodName = (methodId) => {
-                    const method = paymentMethods.value.find(m => m.id === methodId);
-                    return method ? method.name : '未知';
-                };
-                
-                const getCategoryName = (categoryId) => {
-                    const categories = {
-                        food: '飲食',
-                        transportation: '交通',
-                        shopping: '購物',
-                        attraction: '景點門票',
-                        accommodation: '住宿',
-                        merchandise: '周邊',
-                        flight: '機票',
-                        insurance: '保險',
-                        other: '其他'
-                    };
-                    return categories[categoryId] || categoryId;
-                };
-                
-                const getCategoryColor = (categoryId) => {
-                    const colors = {
-                        food: '#4caf50',
-                        transportation: '#2196f3',
-                        shopping: '#ff9800',
-                        attraction: '#9c27b0',
-                        accommodation: '#795548',
-                        merchandise: '#e91e63',
-                        flight: '#607d8b',
-                        insurance: '#3f51b5',
-                        other: '#9e9e9e'
-                    };
-                    return colors[categoryId] || '#9e9e9e';
-                };
-                
-                const triggerImageUpload = () => {
-                    imageInput.value.click();
-                };
-                
-                const handleImageUpload = (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            newItem.value.image = e.target.result;
+                // 購物清單方法
+                const saveShoppingItem = () => {
+                    if (!newShoppingItem.value.name || !newShoppingItem.value.price) {
+                        alert('請填寫商品名稱和價格');
+                        return;
+                    }
+                    
+                    if (editingShoppingItemIndex.value !== null) {
+                        // 更新現有項目
+                        shoppingList.value[editingShoppingItemIndex.value] = {
+                            name: newShoppingItem.value.name,
+                            price: parseInt(newShoppingItem.value.price),
+                            store: newShoppingItem.value.store,
+                            location: newShoppingItem.value.location,
+                            purchased: false
                         };
-                        reader.readAsDataURL(file);
+                    } else {
+                        // 新增項目
+                        shoppingList.value.push({
+                            name: newShoppingItem.value.name,
+                            price: parseInt(newShoppingItem.value.price),
+                            store: newShoppingItem.value.store,
+                            location: newShoppingItem.value.location,
+                            purchased: false
+                        });
                     }
+                    
+                    closeShoppingModal();
+                    saveToLocalStorage();
                 };
                 
-                const addShoppingItem = () => {
-                    if (!newItem.value.name.trim()) return;
-                    
-                    shoppingList.value.push({
-                        name: newItem.value.name,
-                        completed: false,
-                        important: newItem.value.important,
-                        budget: newItem.value.budget || 0,
-                        quantity: newItem.value.quantity || 1,
-                        image: newItem.value.image
-                    });
-                    
-                    // 重置表單
-                    newItem.value = {
-                        name: '',
-                        important: false,
-                        budget: '',
-                        quantity: 1,
-                        image: null
+                const editShoppingItem = (index) => {
+                    const item = shoppingList.value[index];
+                    newShoppingItem.value = {
+                        name: item.name,
+                        price: item.price,
+                        store: item.store,
+                        location: item.location
                     };
-                    
-                    // 重置文件輸入
-                    if (imageInput.value) {
-                        imageInput.value.value = '';
-                    }
-                };
-                
-                const toggleComplete = (index) => {
-                    shoppingList.value[index].completed = !shoppingList.value[index].completed;
+                    editingShoppingItemIndex.value = index;
+                    showAddShoppingItemModal.value = true;
                 };
                 
                 const deleteShoppingItem = (index) => {
-                    if (confirm('確定要刪除此購物項目嗎？')) {
+                    if (confirm('確定要刪除這個購物項目嗎？')) {
                         shoppingList.value.splice(index, 1);
+                        saveToLocalStorage();
+                    }
+                };
+                
+                const closeShoppingModal = () => {
+                    showAddShoppingItemModal.value = false;
+                    editingShoppingItemIndex.value = null;
+                    newShoppingItem.value = {
+                        name: '',
+                        price: null,
+                        store: '',
+                        location: ''
+                    };
+                };
+                
+                // 本地儲存
+                const saveToLocalStorage = () => {
+                    const data = {
+                        preTripChecklist: preTripChecklist.value,
+                        scheduleData: scheduleData.value,
+                        budget: budget.value,
+                        expenses: expenses.value,
+                        shoppingList: shoppingList.value
+                    };
+                    localStorage.setItem('tokyoTripData', JSON.stringify(data));
+                };
+                
+                const loadFromLocalStorage = () => {
+                    const savedData = localStorage.getItem('tokyoTripData');
+                    if (savedData) {
+                        try {
+                            const data = JSON.parse(savedData);
+                            if (data.preTripChecklist) preTripChecklist.value = data.preTripChecklist;
+                            if (data.scheduleData) scheduleData.value = data.scheduleData;
+                            if (data.budget) budget.value = data.budget;
+                            if (data.expenses) expenses.value = data.expenses;
+                            if (data.shoppingList) shoppingList.value = data.shoppingList;
+                        } catch (e) {
+                            console.error('載入本地儲存失敗', e);
+                        }
                     }
                 };
                 
                 // 初始化
                 onMounted(() => {
-                    // 設定今天日期
+                    loadFromLocalStorage();
+                    
+                    // 設置今日日期為新增支出的預設日期
                     const today = new Date();
-                    const formattedDate = today.toISOString().split('T')[0];
-                    
-                    // 初始化航班時間
-                    // 已在數據中定義
-                    
-                    // 初始化天氣數據
-                    fetchWeather();
+                    newExpense.value.date = `${today.getMonth()+1}/${today.getDate()}`;
                 });
                 
                 return {
+                    // 狀態變量
                     activeTab,
                     tabs,
                     preTripChecklist,
-                    showAddChecklist,
+                    priorityOptions,
+                    showAddChecklistModal,
                     newChecklistItem,
                     tripDays,
                     selectedDay,
                     scheduleData,
+                    selectedDaySchedule,
+                    showAddScheduleItemModal,
+                    editingScheduleItem,
+                    newScheduleItem,
                     searchLocation,
                     startLocation,
                     endLocation,
-                    mainAreas,
-                    transportRoutes,
-                    paymentMethods,
-                    newExpense,
+                    budget,
                     expenses,
-                    expenseDays,
-                    selectedExpenseDay,
-                    travelBudget,
-                    newItem,
+                    expenseCategories,
+                    selectedExpenseCategory,
+                    paymentMethods,
+                    showAddExpenseModal,
+                    newExpense,
                     shoppingList,
-                    imageInput,
-                    selectedDaySchedule,
-                    selectedDayWeather,
-                    totalExpenses,
-                    averageDailyExpense,
-                    expenseCount,
-                    remainingBudget,
+                    showAddShoppingItemModal,
+                    editingShoppingItemIndex,
+                    newShoppingItem,
+                    currentWeather,
+                    exchangeRates,
+                    
+                    // 計算屬性
                     filteredExpenses,
-                    completedItems,
-                    totalShoppingBudget,
-                    remainingShoppingBudget,
-                    getPriorityClass,
+                    totalExpenses,
+                    remainingBudget,
+                    budgetUsedPercentage,
+                    
+                    // 方法
                     getPriorityText,
                     addChecklistItem,
                     deleteChecklistItem,
-                    fetchWeather,
-                    showNavigation,
                     openGoogleMaps,
-                    setNavigationArea,
+                    showNavigation,
+                    saveScheduleItem,
+                    editScheduleItem,
+                    deleteScheduleItem,
+                    closeScheduleModal,
+                    saveBudget,
                     addExpense,
                     deleteExpense,
-                    getPaymentMethodIcon,
-                    getPaymentMethodName,
-                    getCategoryName,
-                    getCategoryColor,
-                    triggerImageUpload,
-                    handleImageUpload,
-                    addShoppingItem,
-                    toggleComplete,
-                    deleteShoppingItem
+                    saveShoppingItem,
+                    editShoppingItem,
+                    deleteShoppingItem,
+                    closeShoppingModal
                 };
             }
         }).mount('#app');
